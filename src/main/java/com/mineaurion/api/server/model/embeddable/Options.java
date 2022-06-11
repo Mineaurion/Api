@@ -9,9 +9,10 @@ public class Options {
     @NotNull
     private boolean regen;
 
-    public Options(){}
+    public Options() {
+    }
 
-    public Options(boolean regen){
+    public Options(boolean regen) {
         this.regen = regen;
     }
 

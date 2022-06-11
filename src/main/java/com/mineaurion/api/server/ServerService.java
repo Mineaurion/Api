@@ -15,28 +15,28 @@ public class ServerService {
     @Autowired
     private ServerRepository repository;
 
-    public List<Server> findAll(){
+    public List<Server> findAll() {
         return repository.findAll();
     }
 
-    public Optional<Server> find(Long id){
+    public Optional<Server> find(Long id) {
         return repository.findById(id);
     }
 
-    public Optional<Server> findByExternalId(String id){
+    public Optional<Server> findByExternalId(String id) {
         return repository.findByExternalId(id);
     }
 
-    public Server create(Server server){
+    public Server create(Server server) {
         return repository.save(server);
     }
 
-    public Optional<Server> update(Long id, Server newServer){
+    public Optional<Server> update(Long id, Server newServer) {
         return repository.findById(id)
                 .map(oldItem -> repository.save(oldItem.updateWith(newServer)));
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 }

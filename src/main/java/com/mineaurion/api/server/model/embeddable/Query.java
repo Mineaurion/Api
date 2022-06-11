@@ -19,7 +19,8 @@ public class Query {
         this.port = port;
     }
 
-    public Query(){}
+    public Query() {
+    }
 
     public String getIp() {
         return ip;

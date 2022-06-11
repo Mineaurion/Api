@@ -41,7 +41,7 @@ public class Server {
 
     @NotNull
     @Pattern(regexp = "^[a-zA-Z .]+$", message = "ne correspond pas à un nom de domaine")
-    private String dns ;
+    private String dns;
 
     @NotNull
     @Embedded
@@ -62,7 +62,7 @@ public class Server {
     @Valid
     private Options options;
 
-    public Server(Long id, String name, Version version, String type, boolean beta, WhiteList whiteList, String dns, Query query, Schedule schedule, String externalId, Options options){
+    public Server(Long id, String name, Version version, String type, boolean beta, WhiteList whiteList, String dns, Query query, Schedule schedule, String externalId, Options options) {
         this.id = id;
         this.name = name;
         this.version = version;
@@ -76,7 +76,8 @@ public class Server {
         this.options = options;
     }
 
-    public Server(){}
+    public Server() {
+    }
 
     public Long getId() {
         return id;
@@ -162,7 +163,7 @@ public class Server {
         this.options = options;
     }
 
-    public Server updateWith(Server server){
+    public Server updateWith(Server server) {
         return new Server(
                 this.id,
                 server.name,

@@ -28,7 +28,7 @@ public class SecurityConfig {
                 ).permitAll()
                 // .antMatchers("/h2-console/**", "/h2-console").permitAll()
                 .anyRequest().authenticated()
-                ;
+        ;
 
         return http.build();
     }

@@ -19,13 +19,13 @@ public class OldController {
     private final ServerService serverService;
     private final QueryService queryService;
 
-    public OldController(ServerService serverService, QueryService queryService){
+    public OldController(ServerService serverService, QueryService queryService) {
         this.serverService = serverService;
         this.queryService = queryService;
     }
 
     @GetMapping
-    public ResponseEntity<List<OldQueryServer>> getAllQuery(){
+    public ResponseEntity<List<OldQueryServer>> getAllQuery() {
         List<OldQueryServer> returnList = new ArrayList<>();
         this.serverService.findAll().forEach(server -> {
             try {
@@ -33,7 +33,7 @@ public class OldController {
                 returnList.add(
                         new OldQueryServer(server.getDns(), server.getName(), queryResponse.getOnlinePlayers(), queryResponse.getMaxPlayers(), queryResponse.getPlayerList())
                 );
-            } catch (MCQueryException e){
+            } catch (MCQueryException e) {
                 returnList.add(
                         new OldQueryServer(server.getDns(), server.getName())
                 );

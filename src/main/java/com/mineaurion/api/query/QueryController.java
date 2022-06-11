@@ -17,19 +17,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class QueryController {
     private final QueryService service;
 
-    public QueryController(QueryService service){
+    public QueryController(QueryService service) {
         this.service = service;
     }
 
     @GetMapping
     @Operation(summary = "Get query response from all the server")
-    public ResponseEntity<List<QueryServer>> getAllQuery(){
-       return ResponseEntity.ok().body(service.findAll());
+    public ResponseEntity<List<QueryServer>> getAllQuery() {
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/online-players")
     @Operation(summary = "Get number of player online")
-    public ResponseEntity<Map<String, Integer>> getOnlinePlayers(){
+    public ResponseEntity<Map<String, Integer>> getOnlinePlayers() {
         AtomicInteger numberOfPlayerOnline = new AtomicInteger();
         service.findAll().forEach(queryServer -> {
             numberOfPlayerOnline.addAndGet(queryServer.getOnlinePlayers());

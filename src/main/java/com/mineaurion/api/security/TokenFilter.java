@@ -16,16 +16,15 @@ import java.util.Optional;
 @Component
 public class TokenFilter extends OncePerRequestFilter {
 
-    @Value("${auth.token}")
-    private String configToken = "mineaurion"; // TODO: non fonctionnel le value
-
     private final String HEADER = "Authorization";
     private final String PREFIX = "Bearer ";
+    @Value("${auth.token}")
+    private String configToken = "mineaurion"; // TODO: non fonctionnel le value
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> tokenHeader = Optional.ofNullable(request.getHeader(HEADER));
-        if(tokenHeader.isPresent()) {
+        if (tokenHeader.isPresent()) {
             String token = tokenHeader.get().replace(PREFIX, "");
             if (token.equalsIgnoreCase(this.configToken)) {
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("token", null, null);

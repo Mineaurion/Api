@@ -16,7 +16,9 @@ public class Version {
         this.minecraft = minecraft;
         this.modpack = modpack;
     }
-    public Version(){}
+
+    public Version() {
+    }
 
     public String getMinecraft() {
         return minecraft;

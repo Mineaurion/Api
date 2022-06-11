@@ -17,15 +17,16 @@ public class Schedule {
     @Column(name = "reboot")
     @ElementCollection(targetClass = String.class)
     private List<
-                @Pattern(regexp = "^([0-2]?[0-9]h)?([0-5]?[0-9]m)?$", flags = Pattern.Flag.CASE_INSENSITIVE, message = "le format doit être le suivant <nombre>h<nombre>m")
-                String
+            @Pattern(regexp = "^([0-2]?[0-9]h)?([0-5]?[0-9]m)?$", flags = Pattern.Flag.CASE_INSENSITIVE, message = "le format doit être le suivant <nombre>h<nombre>m")
+                    String
             > reboot;
 
     public Schedule(List<String> reboot) {
         this.reboot = reboot;
     }
 
-    public Schedule(){}
+    public Schedule() {
+    }
 
     public List<String> getReboot() {
         return reboot;

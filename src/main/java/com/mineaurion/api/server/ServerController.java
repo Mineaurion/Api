@@ -24,28 +24,28 @@ public class ServerController {
 
     private final ServerService service;
 
-    public ServerController(ServerService service){
+    public ServerController(ServerService service) {
         this.service = service;
     }
 
     @GetMapping
-    public ResponseEntity<List<Server>> findAll(){
+    public ResponseEntity<List<Server>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Server> find(@PathVariable("id") Long id){
+    public ResponseEntity<Server> find(@PathVariable("id") Long id) {
         return ResponseEntity.of(service.find(id));
     }
 
     @GetMapping("/externalid/{id}/")
-    public ResponseEntity<Server> findByExternalId(@PathVariable("id") String id){
+    public ResponseEntity<Server> findByExternalId(@PathVariable("id") String id) {
         return ResponseEntity.of(service.findByExternalId(id));
     }
 
     @PostMapping
     @Operation(summary = "Create a server", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Server> create(@Valid @RequestBody Server server){
+    public ResponseEntity<Server> create(@Valid @RequestBody Server server) {
         Server created = service.create(server);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
@@ -56,7 +56,7 @@ public class ServerController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update a server", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Server> update(@PathVariable("id") Long id, @Valid @RequestBody Server updatedServer){
+    public ResponseEntity<Server> update(@PathVariable("id") Long id, @Valid @RequestBody Server updatedServer) {
         Optional<Server> updated = service.update(id, updatedServer);
         return updated
                 .map(value -> ResponseEntity.ok().body(value))
@@ -72,13 +72,13 @@ public class ServerController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete a server", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Server> delete(@PathVariable("id") Long id){
+    public ResponseEntity<Server> delete(@PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex){
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         List<ObjectError> errors = ex.getBindingResult().getAllErrors();
         Map<String, String> map = new HashMap<>(errors.size());
         errors.forEach(error -> {

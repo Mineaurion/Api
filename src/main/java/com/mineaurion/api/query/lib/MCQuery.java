@@ -15,18 +15,18 @@ public class MCQuery {
     private final String address;
     private final int queryPort; // the default minecraft query port
 
-    public MCQuery(String address)
-    {
+    public MCQuery(String address) {
         this(address, 25565);
     }
-    public MCQuery(String address, int queryPort)
-    {
+
+    public MCQuery(String address, int queryPort) {
         this.address = address;
         this.queryPort = queryPort;
     }
 
     /**
      * Use this to get more information, including players, from the server.
+     *
      * @return a <code>QueryResponse</code> object
      */
     public QueryResponse fullStat() throws MCQueryException {
@@ -45,7 +45,7 @@ public class MCQuery {
             req.setPayload(token);
             req.payload = ByteUtils.padArrayEnd(req.payload, 4); //for full stat, pad the payload with 4 null bytes
             return new QueryResponse(sendUDP(req.toBytes()));
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new MCQueryException("Number Format Exception", e);
         }
     }
@@ -54,7 +54,7 @@ public class MCQuery {
         DatagramSocket socket = null; //prevent socket already bound exception
         try {
             int localPort = 25566; // the local port we're connected to the server on
-            while(socket == null) {
+            while (socket == null) {
                 try {
                     socket = new DatagramSocket(localPort); //create the socket
                 } catch (BindException e) {

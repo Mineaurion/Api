@@ -19,6 +19,7 @@ public class OldQueryServer {
     public OldQueryServer(String dns, String name, Integer players, Integer maxplayers, List<String> joueurs) {
         this(dns, name, "On", players, maxplayers, joueurs);
     }
+
     public OldQueryServer(String dns, String name, String statut, Integer players, Integer maxplayers, List<String> joueurs) {
         this.dns = dns;
         this.name = name;

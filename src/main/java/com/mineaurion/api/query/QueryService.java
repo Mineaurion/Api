@@ -14,7 +14,7 @@ import java.util.List;
 public class QueryService {
     private final ServerService service;
 
-    public QueryService(ServerService service){
+    public QueryService(ServerService service) {
         this.service = service;
     }
 
@@ -22,7 +22,7 @@ public class QueryService {
         return new MCQuery(address, port).fullStat();
     }
 
-    public List<QueryServer> findAll(){
+    public List<QueryServer> findAll() {
         List<QueryServer> list = new ArrayList<>();
         this.service.findAll().forEach(server -> {
             QueryResponse query = null;

@@ -18,7 +18,8 @@ public class WhiteList {
         this.donator = donator;
     }
 
-    public WhiteList(){}
+    public WhiteList() {
+    }
 
     public boolean isDonator() {
         return donator;

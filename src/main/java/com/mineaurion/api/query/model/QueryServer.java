@@ -12,9 +12,6 @@ import java.util.List;
 public class QueryServer extends Server {
 
     @JsonIgnore
-    private Long id;
-
-    @JsonIgnore
     private Query query;
 
     @JsonIgnore
@@ -28,7 +25,7 @@ public class QueryServer extends Server {
     private Integer maxPlayers = 0;
     private List<String> players = new ArrayList<>();
 
-    public QueryServer(Server server){
+    public QueryServer(Server server) {
         super(
                 server.getId(),
                 server.getName(),
@@ -44,7 +41,7 @@ public class QueryServer extends Server {
         );
     }
 
-    public QueryServer(Server server, QueryResponse queryResponse){
+    public QueryServer(Server server, QueryResponse queryResponse) {
         this(server);
         this.status = true;
         this.onlinePlayers = queryResponse.getOnlinePlayers();
