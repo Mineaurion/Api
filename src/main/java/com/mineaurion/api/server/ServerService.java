@@ -23,6 +23,10 @@ public class ServerService {
         return repository.findById(id);
     }
 
+    public Optional<Server> findByExternalId(String id){
+        return repository.findByExternalId(id);
+    }
+
     public Server create(Server server){
         return repository.save(server);
     }

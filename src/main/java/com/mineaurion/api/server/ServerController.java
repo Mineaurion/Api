@@ -38,6 +38,11 @@ public class ServerController {
         return ResponseEntity.of(service.find(id));
     }
 
+    @GetMapping("/externalid/{id}/")
+    public ResponseEntity<Server> findByExternalId(@PathVariable("id") String id){
+        return ResponseEntity.of(service.findByExternalId(id));
+    }
+
     @PostMapping
     @Operation(summary = "Create a server", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Server> create(@Valid @RequestBody Server server){
