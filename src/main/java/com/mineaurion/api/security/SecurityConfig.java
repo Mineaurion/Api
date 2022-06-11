@@ -22,7 +22,10 @@ public class SecurityConfig {
                 .csrf().disable()
                 .addFilterAfter(new TokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .mvcMatchers(HttpMethod.GET, "/servers/**", "/swagger-doc/**", "/swagger-ui/**").permitAll()
+                .mvcMatchers(
+                        HttpMethod.GET,
+                        "/servers/**", "/swagger-doc/**", "/swagger-ui/**", "/v1/**", "/query"
+                ).permitAll()
                 // .antMatchers("/h2-console/**", "/h2-console").permitAll()
                 .anyRequest().authenticated()
                 ;

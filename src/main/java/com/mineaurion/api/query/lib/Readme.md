@@ -1,0 +1,1 @@
+Based from this Library https://github.com/rmmccann/Minecraft-Status-Query

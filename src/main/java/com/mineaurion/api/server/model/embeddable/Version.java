@@ -1,4 +1,4 @@
-package com.mineaurion.api.server.embeddable;
+package com.mineaurion.api.server.model.embeddable;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;

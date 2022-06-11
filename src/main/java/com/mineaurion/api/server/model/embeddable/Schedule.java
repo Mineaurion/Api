@@ -1,6 +1,8 @@
-package com.mineaurion.api.server.embeddable;
+package com.mineaurion.api.server.model.embeddable;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embeddable;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;

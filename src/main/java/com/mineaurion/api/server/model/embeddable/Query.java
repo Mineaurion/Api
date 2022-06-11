@@ -1,4 +1,4 @@
-package com.mineaurion.api.server.embeddable;
+package com.mineaurion.api.server.model.embeddable;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
@@ -13,9 +13,9 @@ public class Query {
 
     @NotNull
     @Pattern(regexp = "^()([1-9]|[1-5]?[0-9]{2,4}|6[1-4][0-9]{3}|65[1-4][0-9]{2}|655[1-2][0-9]|6553[1-5])$", message = "ne correspond pas à un port")
-    private String port;
+    private int port;
 
-    public Query(String ip, String port) {
+    public Query(String ip, int port) {
         this.ip = ip;
         this.port = port;
     }
@@ -30,11 +30,11 @@ public class Query {
         this.ip = ip;
     }
 
-    public String getPort() {
+    public Integer getPort() {
         return port;
     }
 
-    public void setPort(String port) {
+    public void setPort(int port) {
         this.port = port;
     }
 

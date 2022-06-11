@@ -1,20 +1,15 @@
-package com.mineaurion.api.server;
+package com.mineaurion.api.server.model;
 
 
-import com.mineaurion.api.server.embeddable.Options;
-import com.mineaurion.api.server.embeddable.Schedule;
-import com.mineaurion.api.server.embeddable.WhiteList;
-import com.mineaurion.api.server.embeddable.Query;
-import com.mineaurion.api.server.embeddable.Version;
-import com.mineaurion.api.validation.IsUUID;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
+import com.mineaurion.api.server.model.embeddable.Query;
+import com.mineaurion.api.server.model.embeddable.Version;
+import com.mineaurion.api.server.model.embeddable.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.UUID;
 
 @Entity
 public class Server {
