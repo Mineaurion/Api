@@ -3,6 +3,11 @@ package com.mineaurion.api.query.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @deprecated use {@link QueryServer} instead.
+ * The class will be deleted 2 month after the first release of this api.
+ */
+@Deprecated
 public class OldQueryServer {
 
     private String dns;

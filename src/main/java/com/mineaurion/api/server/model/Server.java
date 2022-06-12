@@ -12,13 +12,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
+// TODO: ajouter des options pour la supervision prometheus cf: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#http_sd_config
 public class Server {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @Pattern(regexp = "^[a-zA-Z ]+$", message = "ne correspond pas à une chaine de caractère")
+    @Pattern(regexp = "^[a-zA-Z\\d ]+$", message = "ne correspond pas à une chaine de caractère")
     @Schema(example = "infinity")
     private String name;
 
@@ -40,7 +41,7 @@ public class Server {
     private WhiteList whiteList;
 
     @NotNull
-    @Pattern(regexp = "^[a-zA-Z .]+$", message = "ne correspond pas à un nom de domaine")
+    @Pattern(regexp = "^[a-zA-Z .-]+$", message = "ne correspond pas à un nom de domaine")
     private String dns;
 
     @NotNull

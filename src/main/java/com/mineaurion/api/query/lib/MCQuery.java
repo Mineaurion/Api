@@ -46,7 +46,7 @@ public class MCQuery {
             req.payload = ByteUtils.padArrayEnd(req.payload, 4); //for full stat, pad the payload with 4 null bytes
             return new QueryResponse(sendUDP(req.toBytes()));
         } catch (NumberFormatException e) {
-            throw new MCQueryException("Number Format Exception", e);
+            throw new MCQueryException("Is the server offline?", e);
         }
     }
 
