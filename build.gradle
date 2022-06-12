@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.mineaurion'
-version = '0.0.1-SNAPSHOT'
+version = project.apiVersion
 sourceCompatibility = '17'
 
 repositories {
