@@ -67,7 +67,7 @@ public class MCQuery {
             socket.send(packet1);
 
             //receive a response in a new packet
-            byte[] out = new byte[1024]; //TODO guess at max size
+            byte[] out = new byte[1024];
             DatagramPacket packet = new DatagramPacket(out, out.length);
             socket.setSoTimeout(500); //one half second timeout
             socket.receive(packet);

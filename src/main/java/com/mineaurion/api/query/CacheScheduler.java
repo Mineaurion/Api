@@ -38,7 +38,7 @@ public class CacheScheduler {
         this.serverService.findAll().forEach(server -> {
             Cache cache = this.cacheManager.getCache("queryResponse");
             if(cache != null){
-                this.taskExecutor.submit( () -> refreshCache(server.getQuery().getIp(), server.getQuery().getPort(), cache));
+                this.taskExecutor.submit( () -> refreshCache(server.getAdministration().getQuery().getIp(), server.getAdministration().getQuery().getPort(), cache));
             }
         });
     }

@@ -17,7 +17,7 @@ public class Schedule {
     @Column(name = "reboot")
     @ElementCollection(targetClass = String.class)
     private List<
-            @Pattern(regexp = "^([0-2]?[0-9]h)?([0-5]?[0-9]m)?$", flags = Pattern.Flag.CASE_INSENSITIVE, message = "le format doit être le suivant <nombre>h<nombre>m")
+            @Pattern(regexp = "^([0-2]?\\dh)?([0-5]?\\dm)?$", flags = Pattern.Flag.CASE_INSENSITIVE, message = "le format doit être le suivant <nombre>h<nombre>m")
                     String
             > reboot;
 

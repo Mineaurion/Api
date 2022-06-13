@@ -1,6 +1,5 @@
 package com.mineaurion.api.security;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -18,15 +17,23 @@ public class TokenFilter extends OncePerRequestFilter {
 
     private final String HEADER = "Authorization";
     private final String PREFIX = "Bearer ";
-    @Value("${auth.token}")
-    private String configToken = "mineaurion"; // TODO: non fonctionnel le value
+
+    private String configToken;
+
+    public TokenFilter(String configToken){
+        this.configToken = configToken;
+    }
+
+    public TokenFilter(){
+        this("mineaurion");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<String> tokenHeader = Optional.ofNullable(request.getHeader(HEADER));
         if (tokenHeader.isPresent()) {
             String token = tokenHeader.get().replace(PREFIX, "");
-            if (token.equalsIgnoreCase(this.configToken)) {
+            if (token.equals(configToken)) {
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken("token", null, null);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {

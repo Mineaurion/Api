@@ -3,8 +3,7 @@ package com.mineaurion.api.query.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mineaurion.api.query.lib.QueryResponse;
 import com.mineaurion.api.server.model.Server;
-import com.mineaurion.api.server.model.embeddable.Options;
-import com.mineaurion.api.server.model.embeddable.Query;
+import com.mineaurion.api.server.model.embeddable.Administration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,13 +11,10 @@ import java.util.List;
 public class QueryServer extends Server {
 
     @JsonIgnore
-    private Query query;
-
-    @JsonIgnore
     private String externalId;
 
     @JsonIgnore
-    private Options options;
+    private Administration administration;
 
     private boolean status = false;
     private Integer onlinePlayers = 0;
@@ -31,13 +27,10 @@ public class QueryServer extends Server {
                 server.getName(),
                 server.getVersion(),
                 server.getType(),
-                server.isBeta(),
-                server.getWhiteList(),
+                server.getAccess(),
                 server.getDns(),
-                server.getQuery(),
-                server.getSchedule(),
-                server.getExternalId(),
-                server.getOptions()
+                server.getAdministration(),
+                server.getSchedule()
         );
     }
 

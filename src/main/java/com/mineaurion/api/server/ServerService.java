@@ -24,7 +24,7 @@ public class ServerService {
     }
 
     public Optional<Server> findByExternalId(String id) {
-        return repository.findByExternalId(id);
+        return repository.findByAdministrationExternalId(id);
     }
 
     public Server create(Server server) {

@@ -1,5 +1,7 @@
 package com.mineaurion.api.server.model.embeddable;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
@@ -7,9 +9,11 @@ import javax.validation.constraints.NotNull;
 public class Version {
 
     @NotNull
+    @Schema(example = "1.4.7")
     private String minecraft;
 
     @NotNull
+    @Schema(example = "1.0.0")
     private String modpack;
 
     public Version(String minecraft, String modpack) {

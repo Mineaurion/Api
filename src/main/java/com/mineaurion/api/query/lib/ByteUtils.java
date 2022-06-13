@@ -18,7 +18,7 @@ public class ByteUtils {
      * @return a new array based on the desired range of the input
      */
     public static byte[] subArray(byte[] in, int a, int b) {
-        if (b - a > in.length) return in;// TODO better error checking
+        if (b - a > in.length) return in;
 
         byte[] out = new byte[(b - a) + 1];
 
@@ -64,7 +64,7 @@ public class ByteUtils {
     public static byte[][] split(byte[] input) {
         ArrayList<byte[]> temp = new ArrayList<>();
 
-        byte[][] output; //TODO be more efficient here
+        byte[][] output;
 
         int index_cache = 0;
         for (int i = 0; i < input.length; i++) {

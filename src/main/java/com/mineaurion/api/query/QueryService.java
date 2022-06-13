@@ -31,11 +31,13 @@ public class QueryService {
     }
 
     private QueryServer getQueryServer(Server server){
+        String address = server.getAdministration().getQuery().getIp();
+        Integer port = server.getAdministration().getQuery().getPort();
         try {
-            QueryResponse query = this.minecraftQueryService.getQueryResponse(server.getQuery().getIp(), server.getQuery().getPort());
+            QueryResponse query = this.minecraftQueryService.getQueryResponse(address, port);
             return new QueryServer(server, query);
         } catch (MCQueryException e) {
-            logger.error(errorLog.formatted(server.getQuery().getIp(), server.getQuery().getPort(), e.getMessage()));
+            logger.error(errorLog.formatted(address, port, e.getMessage()));
             return new QueryServer(server);
         }
     }
@@ -62,11 +64,13 @@ public class QueryService {
      */
     @Deprecated
     private OldQueryServer getOldQueryServer(Server server){
+        String address = server.getAdministration().getQuery().getIp();
+        Integer port = server.getAdministration().getQuery().getPort();
         try{
-            QueryResponse queryResponse = this.minecraftQueryService.getQueryResponse(server.getQuery().getIp(), server.getQuery().getPort());
+            QueryResponse queryResponse = this.minecraftQueryService.getQueryResponse(address, port);
             return new OldQueryServer(server.getDns(), server.getName(), queryResponse.getOnlinePlayers(), queryResponse.getMaxPlayers(), queryResponse.getPlayerList());
         } catch (MCQueryException e) {
-            logger.error(errorLog.formatted(server.getQuery().getIp(), server.getQuery().getPort(), e.getMessage()));
+            logger.error(errorLog.formatted(address, port, e.getMessage()));
             return new OldQueryServer(server.getDns(), server.getName());
         }
     }

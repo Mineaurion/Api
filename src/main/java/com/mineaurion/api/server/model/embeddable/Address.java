@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Embeddable
-public class Query {
+public class Address {
 
     @NotNull
     @Pattern(regexp = "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", message = "ne correspond pas à une addresse ip")
@@ -14,12 +14,12 @@ public class Query {
     @NotNull
     private int port;
 
-    public Query(String ip, int port) {
+    public Address(String ip, int port) {
         this.ip = ip;
         this.port = port;
     }
 
-    public Query() {
+    public Address() {
     }
 
     public String getIp() {
