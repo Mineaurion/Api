@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @EnableAsync
@@ -45,6 +46,14 @@ public class QueryService {
             list.add(this.getQueryServer(server));
         });
         return list;
+    }
+
+    public Integer getPlayerCount() {
+        AtomicInteger numberOfPlayerOnline = new AtomicInteger();
+        findAll().forEach(queryServer -> {
+            numberOfPlayerOnline.addAndGet(queryServer.getOnlinePlayers());
+        });
+        return numberOfPlayerOnline.get();
     }
 
     /**

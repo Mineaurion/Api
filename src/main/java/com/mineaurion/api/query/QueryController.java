@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/query")
@@ -30,10 +29,6 @@ public class QueryController {
     @GetMapping("/online-players")
     @Operation(summary = "Get number of player online")
     public ResponseEntity<Map<String, Integer>> getOnlinePlayers() {
-        AtomicInteger numberOfPlayerOnline = new AtomicInteger();
-        service.findAll().forEach(queryServer -> {
-            numberOfPlayerOnline.addAndGet(queryServer.getOnlinePlayers());
-        });
-        return ResponseEntity.ok().body(Collections.singletonMap("onlinePlayers", numberOfPlayerOnline.get()));
+        return ResponseEntity.ok().body(Collections.singletonMap("onlinePlayers", service.getPlayerCount()));
     }
 }
