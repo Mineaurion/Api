@@ -16,11 +16,10 @@ import javax.validation.constraints.Pattern;
 // TODO: ajouter des options pour la supervision prometheus cf: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#http_sd_config
 public class Server {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
-    @Pattern(regexp = "^[a-zA-Z\\d ]+$", message = "ne correspond pas à une chaine de caractère")
     @Schema(example = "Ultimate 1.4.7")
     private String name;
 
@@ -39,7 +38,7 @@ public class Server {
     private Access access;
 
     @NotNull
-    @Pattern(regexp = "^[a-zA-Z .-]+$", message = "ne correspond pas à un nom de domaine")
+    @Pattern(regexp = "^[a-zA-Z\\d .-]+$", message = "ne correspond pas à un nom de domaine")
     @Schema(example = "ultimate.mineaurion.com")
     private String dns;
 
