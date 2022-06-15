@@ -1,12 +1,9 @@
 package com.mineaurion.api.query.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mineaurion.api.query.lib.QueryResponse;
+import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.server.model.Server;
 import com.mineaurion.api.server.model.embeddable.Administration;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class QueryServer extends Server {
 
@@ -19,7 +16,7 @@ public class QueryServer extends Server {
     private boolean status = false;
     private Integer onlinePlayers = 0;
     private Integer maxPlayers = 0;
-    private List<String> players = new ArrayList<>();
+    private String[] players = new String[0];
 
     public QueryServer(Server server) {
         super(
@@ -34,7 +31,7 @@ public class QueryServer extends Server {
         );
     }
 
-    public QueryServer(Server server, QueryResponse queryResponse) {
+    public QueryServer(Server server, MCQuery queryResponse) {
         this(server);
         this.status = true;
         this.onlinePlayers = queryResponse.getOnlinePlayers();
@@ -66,11 +63,11 @@ public class QueryServer extends Server {
         this.maxPlayers = maxPlayers;
     }
 
-    public List<String> getPlayers() {
+    public String[] getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<String> players) {
+    public void setPlayers(String[] players) {
         this.players = players;
     }
 }

@@ -1,85 +1,201 @@
 package com.mineaurion.api.query.lib;
 
-import java.net.*;
-import java.util.Random;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * A class that handles Minecraft Query protocol requests
- *
- * @author Ryan McCann
+ * Lib from GitHub, couple modification to add some getter. See the link below
+ * @see <a href="https://github.com/ryan-shaw/MCJQuery">MCJQuery</a>
  */
 public class MCQuery {
-    public final static byte HANDSHAKE = 9;
-    public final static byte STAT = 0;
+    /**
+     * The target address and port
+     */
+    private final InetSocketAddress address;
+    private final InetSocketAddress queryAddress;
+    /**
+     * <code>null</code> if no successful request has been sent, otherwise a Map
+     * containing any metadata received except the player list
+     */
+    private Map<String, String>	values;
+    /**
+     * <code>null</code> if no successful request has been sent, otherwise an
+     * array containing all online player usernames
+     */
+    private String[] playerList;
 
-    private final String address;
-    private final int queryPort; // the default minecraft query port
-
-    public MCQuery(String address) {
-        this(address, 25565);
-    }
-
-    public MCQuery(String address, int queryPort) {
-        this.address = address;
-        this.queryPort = queryPort;
+    public MCQuery(String host, int port) throws IOException {
+        this(new InetSocketAddress(host, port), new InetSocketAddress(host, port));
     }
 
     /**
-     * Use this to get more information, including players, from the server.
+     * Create a new instance of this class
      *
-     * @return a <code>QueryResponse</code> object
+     * @param address
+     *            The servers IP-address
      */
-    public QueryResponse fullStat() throws MCQueryException {
-        QueryRequest req = new QueryRequest();
-        req.type = HANDSHAKE;
-        req.sessionID = new Random().nextInt(5);
+    public MCQuery(InetSocketAddress queryAddress, InetSocketAddress address) throws IOException {
+        this.address = address;
+        this.queryAddress = queryAddress;
+        sendQueryRequest();
+    }
 
-        int val = 11 - req.toBytes().length; //should be 11 bytes total
-        byte[] input = ByteUtils.padArrayEnd(req.toBytes(), val);
-
-        try {
-            int token = Integer.parseInt(new String(sendUDP(input)).trim());
-            req = new QueryRequest();
-            req.type = STAT;
-            req.sessionID = new Random().nextInt(5);
-            req.setPayload(token);
-            req.payload = ByteUtils.padArrayEnd(req.payload, 4); //for full stat, pad the payload with 4 null bytes
-            return new QueryResponse(sendUDP(req.toBytes()));
-        } catch (NumberFormatException e) {
-            throw new MCQueryException("Is the server offline?", e);
+    /**
+     * Get the additional values if the Query has been sent
+     *
+     * @return The data
+     * @throws IllegalStateException
+     *             if the query has not been sent yet or there has been an error
+     */
+    public Map<String, String> getValues() {
+        if(values == null) {
+            throw new IllegalStateException("Query has not been sent yet!");
+        } else {
+            return values;
         }
     }
 
-    private byte[] sendUDP(byte[] input) throws MCQueryException {
-        DatagramSocket socket = null; //prevent socket already bound exception
-        try {
-            int localPort = 25566; // the local port we're connected to the server on
-            while (socket == null) {
-                try {
-                    socket = new DatagramSocket(localPort); //create the socket
-                } catch (BindException e) {
-                    ++localPort; // increment if port is already in use
+    /**
+     * Get the online usernames if the Query has been sent
+     *
+     * @return The username array
+     * @throws IllegalStateException
+     *             if the query has not been sent yet or there has been an error
+     */
+    public String[] getPlayerList() {
+        if(playerList == null) {
+            throw new IllegalStateException("Query has not been sent yet!");
+        } else {
+            return playerList;
+        }
+    }
+
+    public Integer getOnlinePlayers(){
+        return Integer.parseInt(getValues().getOrDefault("numplayers", "0"));
+    }
+
+    public Integer getMaxPlayers(){
+        return Integer.parseInt(getValues().getOrDefault("maxplayers", "0"));
+    }
+
+    /**
+     * Request the UDP query
+     *
+     * @throws IOException
+     *             if anything goes wrong during the request
+     */
+    private void sendQueryRequest() throws IOException {
+        InetSocketAddress local = queryAddress;
+        if(queryAddress.getPort() == 0){
+            local = new InetSocketAddress(queryAddress.getAddress(), address.getPort());
+        }
+        System.out.println(local);
+        try (DatagramSocket socket = new DatagramSocket()) {
+            final byte[] receiveData = new byte[10240];
+            socket.setSoTimeout(2000);
+            sendPacket(socket, local, 0xFE, 0xFD, 0x09, 0x01, 0x01, 0x01, 0x01);
+            final int challengeInteger;
+            {
+                receivePacket(socket, receiveData);
+                byte byte1 = -1;
+                int i = 0;
+                byte[] buffer = new byte[11];
+                for (int count = 5; (byte1 = receiveData[count++]) != 0; )
+                    buffer[i++] = byte1;
+                challengeInteger = Integer.parseInt(new String(buffer).trim());
+            }
+            sendPacket(socket, local, 0xFE, 0xFD, 0x00, 0x01, 0x01, 0x01, 0x01, challengeInteger >> 24, challengeInteger >> 16, challengeInteger >> 8, challengeInteger, 0x00, 0x00, 0x00, 0x00);
+
+            final int length = receivePacket(socket, receiveData).getLength();
+            values = new HashMap<>();
+            final AtomicInteger cursor = new AtomicInteger(5);
+            while (cursor.get() < length) {
+                final String s = readString(receiveData, cursor);
+                if (s.length() == 0)
+                    break;
+                else {
+                    final String v = readString(receiveData, cursor);
+                    values.put(s, v);
                 }
             }
-            //create a packet from the input data and send it on the socket
-            InetAddress address = InetAddress.getByName(this.address); //create InetAddress object from the address
-            DatagramPacket packet1 = new DatagramPacket(input, input.length, address, queryPort);
-            socket.send(packet1);
-
-            //receive a response in a new packet
-            byte[] out = new byte[1024];
-            DatagramPacket packet = new DatagramPacket(out, out.length);
-            socket.setSoTimeout(500); //one half second timeout
-            socket.receive(packet);
-            socket.close();
-
-            return packet.getData();
-        } catch (SocketTimeoutException e) {
-            throw new MCQueryException("Socket Timeout! Is the server offline?", e);
-        } catch (UnknownHostException e) {
-            throw new MCQueryException("Unknown host!", e);
-        } catch (Exception e) {
-            throw new MCQueryException("Exception when contacting the server", e);
+            readString(receiveData, cursor);
+            final Set<String> players = new HashSet<>();
+            while (cursor.get() < length) {
+                final String name = readString(receiveData, cursor);
+                if (name.length() > 0)
+                    players.add(name);
+            }
+            playerList = players.toArray(new String[0]);
         }
+    }
+
+    /**
+     * Helper method to send a datagram packet
+     *
+     * @param socket
+     *            The connection the packet should be sent through
+     * @param targetAddress
+     *            The target IP
+     * @param data
+     *            The byte data to be sent
+     * @throws IOException
+     */
+    private void sendPacket(DatagramSocket socket, InetSocketAddress targetAddress, byte... data) throws IOException {
+        DatagramPacket sendPacket = new DatagramPacket(data, data.length, targetAddress.getAddress(), targetAddress.getPort());
+        socket.send(sendPacket);
+    }
+
+    /**
+     * Helper method to send a datagram packet
+     *
+     * @see MCQuery#sendPacket(DatagramSocket, InetSocketAddress, byte...)
+     * @param socket
+     *            The connection the packet should be sent through
+     * @param targetAddress
+     *            The target IP
+     * @param data
+     *            The byte data to be sent, will be cast to bytes
+     * @throws IOException
+     */
+    private void sendPacket(DatagramSocket socket, InetSocketAddress targetAddress, int... data) throws IOException {
+        final byte[] d = new byte[data.length];
+        int i = 0;
+        for(int j : data)
+            d[i++] = (byte)(j & 0xff);
+        sendPacket(socket, targetAddress, d);
+    }
+
+    /**
+     * Receive a packet from the given socket
+     *
+     * @param socket
+     *            the socket
+     * @param buffer
+     *            the buffer for the information to be written into
+     * @return the entire packet
+     */
+    private DatagramPacket receivePacket(DatagramSocket socket, byte[] buffer) throws IOException {
+        final DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+        socket.receive(dp);
+        return dp;
+    }
+
+    /**
+     * Read a String until 0x00
+     *
+     * @param array
+     *            The byte array
+     * @param cursor
+     *            The mutable cursor (will be increased)
+     * @return The string
+     */
+    private String readString(byte[] array, AtomicInteger cursor) {
+        final int startPosition = cursor.incrementAndGet();
+        for(; cursor.get() < array.length && array[cursor.get()] != 0; cursor.incrementAndGet());
+        return new String(Arrays.copyOfRange(array, startPosition, cursor.get()));
     }
 }

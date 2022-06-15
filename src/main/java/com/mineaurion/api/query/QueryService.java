@@ -1,7 +1,6 @@
 package com.mineaurion.api.query;
 
-import com.mineaurion.api.query.lib.MCQueryException;
-import com.mineaurion.api.query.lib.QueryResponse;
+import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.query.model.OldQueryServer;
 import com.mineaurion.api.query.model.QueryServer;
 import com.mineaurion.api.server.ServerService;
@@ -11,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,9 +34,9 @@ public class QueryService {
         String address = server.getAdministration().getQuery().getIp();
         Integer port = server.getAdministration().getQuery().getPort();
         try {
-            QueryResponse query = this.minecraftQueryService.getQueryResponse(address, port);
+            MCQuery query = this.minecraftQueryService.getQueryResponse(address, port);
             return new QueryServer(server, query);
-        } catch (MCQueryException e) {
+        } catch (IOException e) {
             logger.error(errorLog.formatted(address, port, e.getMessage()));
             return new QueryServer(server);
         }
@@ -67,9 +67,9 @@ public class QueryService {
         String address = server.getAdministration().getQuery().getIp();
         Integer port = server.getAdministration().getQuery().getPort();
         try{
-            QueryResponse queryResponse = this.minecraftQueryService.getQueryResponse(address, port);
+            MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(address, port);
             return new OldQueryServer(server.getDns(), server.getName(), queryResponse.getOnlinePlayers(), queryResponse.getMaxPlayers(), queryResponse.getPlayerList());
-        } catch (MCQueryException e) {
+        } catch (IOException e) {
             logger.error(errorLog.formatted(address, port, e.getMessage()));
             return new OldQueryServer(server.getDns(), server.getName());
         }

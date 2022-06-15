@@ -1,8 +1,5 @@
 package com.mineaurion.api.query.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @deprecated use {@link QueryServer} instead.
  * The class will be deleted 2 month after the first release of this api.
@@ -15,17 +12,17 @@ public class OldQueryServer {
     private String statut;
     private Integer players;
     private Integer maxplayers;
-    private List<String> joueurs = new ArrayList<>();
+    private String[] joueurs = new String[0];
 
     public OldQueryServer(String dns, String name) {
         this(dns, name, "Off", 0, 0);
     }
 
-    public OldQueryServer(String dns, String name, Integer players, Integer maxplayers, List<String> joueurs) {
+    public OldQueryServer(String dns, String name, Integer players, Integer maxplayers, String[] joueurs) {
         this(dns, name, "On", players, maxplayers, joueurs);
     }
 
-    public OldQueryServer(String dns, String name, String statut, Integer players, Integer maxplayers, List<String> joueurs) {
+    public OldQueryServer(String dns, String name, String statut, Integer players, Integer maxplayers, String[] joueurs) {
         this.dns = dns;
         this.name = name;
         this.statut = statut;
@@ -83,11 +80,11 @@ public class OldQueryServer {
         this.maxplayers = maxplayers;
     }
 
-    public List<String> getJoueurs() {
+    public String[] getJoueurs() {
         return joueurs;
     }
 
-    public void setJoueurs(List<String> joueurs) {
+    public void setJoueurs(String[] joueurs) {
         this.joueurs = joueurs;
     }
 }

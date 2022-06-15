@@ -1,7 +1,6 @@
 package com.mineaurion.api.query;
 
-import com.mineaurion.api.query.lib.MCQueryException;
-import com.mineaurion.api.query.lib.QueryResponse;
+import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.server.ServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+
+import java.io.IOException;
 
 @Configuration
 @EnableScheduling
@@ -46,9 +47,9 @@ public class CacheScheduler {
     private void refreshCache(String address, Integer port, Cache cache){
         String cacheKey = address + "-" + port;
         try {
-            QueryResponse queryResponse = this.minecraftQueryService.getQueryResponse(address, port);
+            MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(address, port);
             cache.putIfAbsent(cacheKey, queryResponse);
-        } catch (MCQueryException e) {
+        } catch (IOException e) {
             logger.info("The server %s:%s could updated in cache. Caused by : %s".formatted(address, port, e.getMessage()));
         }
     }
