@@ -1,5 +1,8 @@
 package com.mineaurion.api.query.model;
 
+import com.mineaurion.api.query.lib.MCQuery;
+import com.mineaurion.api.server.model.Server;
+
 /**
  * @deprecated use {@link QueryServer} instead.
  * The class will be deleted 2 month after the first release of this api.
@@ -12,33 +15,16 @@ public class OldQueryServer {
     private String statut;
     private Integer players;
     private Integer maxplayers;
-    private String[] joueurs = new String[0];
+    private String[] joueurs;
 
-    public OldQueryServer(String dns, String name) {
-        this(dns, name, "Off", 0, 0);
+    public OldQueryServer(Server server, MCQuery query){
+        this.dns = server.getDns();
+        this.name = server.getName();
+        this.statut = query.getStatus() ? "On" : "Off";
+        this.players = query.getOnlinePlayers();
+        this.maxplayers = query.getMaxPlayers();
+        this.joueurs = query.getPlayerList();
     }
-
-    public OldQueryServer(String dns, String name, Integer players, Integer maxplayers, String[] joueurs) {
-        this(dns, name, "On", players, maxplayers, joueurs);
-    }
-
-    public OldQueryServer(String dns, String name, String statut, Integer players, Integer maxplayers, String[] joueurs) {
-        this.dns = dns;
-        this.name = name;
-        this.statut = statut;
-        this.players = players;
-        this.maxplayers = maxplayers;
-        this.joueurs = joueurs;
-    }
-
-    public OldQueryServer(String dns, String name, String statut, Integer players, Integer maxplayers) {
-        this.dns = dns;
-        this.name = name;
-        this.statut = statut;
-        this.players = players;
-        this.maxplayers = maxplayers;
-    }
-
 
     public String getDns() {
         return dns;

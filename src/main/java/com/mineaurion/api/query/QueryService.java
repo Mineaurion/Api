@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class QueryService {
 
     Logger logger = LoggerFactory.getLogger(QueryService.class);
-    private final String errorLog = "The server %s:%s could not be contacted. Caused by : %s";
+    private final String errorLog = "The server %s with address %s:%s could not be contacted. Caused by : %s";
 
     private final ServerService service;
     private final MinecraftQueryService minecraftQueryService;
@@ -33,13 +32,8 @@ public class QueryService {
     private QueryServer getQueryServer(Server server){
         String address = server.getAdministration().getQuery().getIp();
         Integer port = server.getAdministration().getQuery().getPort();
-        try {
-            MCQuery query = this.minecraftQueryService.getQueryResponse(address, port);
-            return new QueryServer(server, query);
-        } catch (IOException e) {
-            logger.error(errorLog.formatted(address, port, e.getMessage()));
-            return new QueryServer(server);
-        }
+        MCQuery query = this.minecraftQueryService.getQueryResponse(server.getName(), address, port);
+        return new QueryServer(server, query);
     }
 
     public List<QueryServer> findAll() {
@@ -66,13 +60,8 @@ public class QueryService {
     private OldQueryServer getOldQueryServer(Server server){
         String address = server.getAdministration().getQuery().getIp();
         Integer port = server.getAdministration().getQuery().getPort();
-        try{
-            MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(address, port);
-            return new OldQueryServer(server.getDns(), server.getName(), queryResponse.getOnlinePlayers(), queryResponse.getMaxPlayers(), queryResponse.getPlayerList());
-        } catch (IOException e) {
-            logger.error(errorLog.formatted(address, port, e.getMessage()));
-            return new OldQueryServer(server.getDns(), server.getName());
-        }
+        MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(server.getName(), address, port);
+        return new OldQueryServer(server, queryResponse);
     }
 
     /**

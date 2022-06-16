@@ -13,12 +13,12 @@ public class QueryServer extends Server {
     @JsonIgnore
     private Administration administration;
 
-    private boolean status = false;
-    private Integer onlinePlayers = 0;
-    private Integer maxPlayers = 0;
-    private String[] players = new String[0];
+    private boolean status;
+    private Integer onlinePlayers;
+    private Integer maxPlayers;
+    private String[] players;
 
-    public QueryServer(Server server) {
+    public QueryServer(Server server, MCQuery queryResponse) {
         super(
                 server.getId(),
                 server.getName(),
@@ -29,11 +29,7 @@ public class QueryServer extends Server {
                 server.getAdministration(),
                 server.getSchedule()
         );
-    }
-
-    public QueryServer(Server server, MCQuery queryResponse) {
-        this(server);
-        this.status = true;
+        this.status = queryResponse.getStatus();
         this.onlinePlayers = queryResponse.getOnlinePlayers();
         this.maxPlayers = queryResponse.getMaxPlayers();
         this.players = queryResponse.getPlayerList();

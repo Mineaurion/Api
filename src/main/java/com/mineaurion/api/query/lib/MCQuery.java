@@ -21,57 +21,44 @@ public class MCQuery {
      * <code>null</code> if no successful request has been sent, otherwise a Map
      * containing any metadata received except the player list
      */
-    private Map<String, String>	values;
+    private final Map<String, String>	values = new HashMap<>();
     /**
      * <code>null</code> if no successful request has been sent, otherwise an
      * array containing all online player usernames
      */
-    private String[] playerList;
+    private String[] playerList = new String[0];
 
-    public MCQuery(String host, int port) throws IOException {
+    private boolean status = false;
+
+    public MCQuery(String host, int port) {
         this(new InetSocketAddress(host, port), new InetSocketAddress(host, port));
     }
 
     /**
      * Create a new instance of this class
-     *
-     * @param address
-     *            The servers IP-address
+     * @param address The servers IP-address
      */
-    public MCQuery(InetSocketAddress queryAddress, InetSocketAddress address) throws IOException {
+    public MCQuery(InetSocketAddress queryAddress, InetSocketAddress address) {
         this.address = address;
         this.queryAddress = queryAddress;
-        sendQueryRequest();
     }
 
     /**
      * Get the additional values if the Query has been sent
      *
      * @return The data
-     * @throws IllegalStateException
-     *             if the query has not been sent yet or there has been an error
      */
     public Map<String, String> getValues() {
-        if(values == null) {
-            throw new IllegalStateException("Query has not been sent yet!");
-        } else {
-            return values;
-        }
+        return values;
     }
 
     /**
      * Get the online usernames if the Query has been sent
      *
      * @return The username array
-     * @throws IllegalStateException
-     *             if the query has not been sent yet or there has been an error
      */
     public String[] getPlayerList() {
-        if(playerList == null) {
-            throw new IllegalStateException("Query has not been sent yet!");
-        } else {
-            return playerList;
-        }
+        return playerList;
     }
 
     public Integer getOnlinePlayers(){
@@ -82,13 +69,15 @@ public class MCQuery {
         return Integer.parseInt(getValues().getOrDefault("maxplayers", "0"));
     }
 
+    public boolean getStatus(){
+        return status;
+    }
+
     /**
      * Request the UDP query
-     *
-     * @throws IOException
-     *             if anything goes wrong during the request
+     * @throws IOException if anything goes wrong during the request
      */
-    private void sendQueryRequest() throws IOException {
+    public void sendQueryRequest() throws IOException {
         InetSocketAddress local = queryAddress;
         if(queryAddress.getPort() == 0){
             local = new InetSocketAddress(queryAddress.getAddress(), address.getPort());
@@ -111,7 +100,6 @@ public class MCQuery {
             sendPacket(socket, local, 0xFE, 0xFD, 0x00, 0x01, 0x01, 0x01, 0x01, challengeInteger >> 24, challengeInteger >> 16, challengeInteger >> 8, challengeInteger, 0x00, 0x00, 0x00, 0x00);
 
             final int length = receivePacket(socket, receiveData).getLength();
-            values = new HashMap<>();
             final AtomicInteger cursor = new AtomicInteger(5);
             while (cursor.get() < length) {
                 final String s = readString(receiveData, cursor);
@@ -122,6 +110,7 @@ public class MCQuery {
                     values.put(s, v);
                 }
             }
+            status = true;
             readString(receiveData, cursor);
             final Set<String> players = new HashSet<>();
             while (cursor.get() < length) {
@@ -136,13 +125,9 @@ public class MCQuery {
     /**
      * Helper method to send a datagram packet
      *
-     * @param socket
-     *            The connection the packet should be sent through
-     * @param targetAddress
-     *            The target IP
-     * @param data
-     *            The byte data to be sent
-     * @throws IOException
+     * @param socket The connection the packet should be sent through
+     * @param targetAddress The target IP
+     * @param data The byte data to be sent
      */
     private void sendPacket(DatagramSocket socket, InetSocketAddress targetAddress, byte... data) throws IOException {
         DatagramPacket sendPacket = new DatagramPacket(data, data.length, targetAddress.getAddress(), targetAddress.getPort());
@@ -153,13 +138,9 @@ public class MCQuery {
      * Helper method to send a datagram packet
      *
      * @see MCQuery#sendPacket(DatagramSocket, InetSocketAddress, byte...)
-     * @param socket
-     *            The connection the packet should be sent through
-     * @param targetAddress
-     *            The target IP
-     * @param data
-     *            The byte data to be sent, will be cast to bytes
-     * @throws IOException
+     * @param socket The connection the packet should be sent through
+     * @param targetAddress The target IP
+     * @param data The byte data to be sent, will be cast to bytes
      */
     private void sendPacket(DatagramSocket socket, InetSocketAddress targetAddress, int... data) throws IOException {
         final byte[] d = new byte[data.length];
@@ -172,10 +153,8 @@ public class MCQuery {
     /**
      * Receive a packet from the given socket
      *
-     * @param socket
-     *            the socket
-     * @param buffer
-     *            the buffer for the information to be written into
+     * @param socket the socket
+     * @param buffer the buffer for the information to be written into
      * @return the entire packet
      */
     private DatagramPacket receivePacket(DatagramSocket socket, byte[] buffer) throws IOException {
@@ -187,10 +166,8 @@ public class MCQuery {
     /**
      * Read a String until 0x00
      *
-     * @param array
-     *            The byte array
-     * @param cursor
-     *            The mutable cursor (will be increased)
+     * @param array The byte array
+     * @param cursor The mutable cursor (will be increased)
      * @return The string
      */
     private String readString(byte[] array, AtomicInteger cursor) {

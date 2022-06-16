@@ -13,8 +13,6 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.io.IOException;
-
 @Configuration
 @EnableScheduling
 @ConditionalOnProperty(prefix = "scheduler", name = "cache", havingValue = "true")
@@ -36,21 +34,19 @@ public class CacheScheduler {
     @Scheduled(fixedRate = 120000 )
     public void refreshCacheQueryServer(){
         logger.info("Refreshing query server cache");
-        this.serverService.findAll().forEach(server -> {
-            Cache cache = this.cacheManager.getCache("queryResponse");
-            if(cache != null){
-                this.taskExecutor.submit( () -> refreshCache(server.getAdministration().getQuery().getIp(), server.getAdministration().getQuery().getPort(), cache));
-            }
-        });
+        Cache cache = this.cacheManager.getCache("queryResponse");
+        if(cache != null){
+            cache.clear();
+            this.serverService.findAll().forEach(server -> {
+                this.taskExecutor.submit( () -> refreshCache(server.getName(), server.getAdministration().getQuery().getIp(), server.getAdministration().getQuery().getPort(), cache));
+            });
+
+        }
     }
 
-    private void refreshCache(String address, Integer port, Cache cache){
-        String cacheKey = address + "-" + port;
-        try {
-            MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(address, port);
-            cache.putIfAbsent(cacheKey, queryResponse);
-        } catch (IOException e) {
-            logger.info("The server %s:%s could updated in cache. Caused by : %s".formatted(address, port, e.getMessage()));
-        }
+    private void refreshCache(String name, String address, Integer port, Cache cache){
+        String cacheKey = "%s-%s-%s".formatted(name, address, port);
+        MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(name, address, port);
+        cache.putIfAbsent(cacheKey, queryResponse);
     }
 }
