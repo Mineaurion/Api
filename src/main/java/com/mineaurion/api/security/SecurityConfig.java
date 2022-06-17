@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .mvcMatchers(
                         HttpMethod.GET,
-                        "/servers/**", "/swagger-doc/**", "/swagger-ui/**", "/v1/**", "/query/**", "/actuator/**"
+                        "/swagger-doc/**", "/swagger-ui/**", "/v1/**", "/query/**", "/actuator/**"
                 ).permitAll()
                 // .antMatchers("/h2-console/**", "/h2-console").permitAll()
                 .anyRequest().authenticated()
