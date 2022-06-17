@@ -82,7 +82,7 @@ public class MCQuery {
         if(queryAddress.getPort() == 0){
             local = new InetSocketAddress(queryAddress.getAddress(), address.getPort());
         }
-        System.out.println(local);
+
         try (DatagramSocket socket = new DatagramSocket()) {
             final byte[] receiveData = new byte[10240];
             socket.setSoTimeout(2000);

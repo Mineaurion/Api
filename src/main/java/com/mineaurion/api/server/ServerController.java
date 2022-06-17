@@ -1,7 +1,6 @@
 package com.mineaurion.api.server;
 
 import com.mineaurion.api.server.model.Server;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -19,7 +18,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/servers")
-@SecurityRequirement(name = "bearer")
+@SecurityRequirement(name = "bearerAuth")
 public class ServerController {
 
     private final ServerService service;
@@ -44,7 +43,6 @@ public class ServerController {
     }
 
     @PostMapping
-    @Operation(summary = "Create a server", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Server> create(@Valid @RequestBody Server server) {
         Server created = service.create(server);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -55,7 +53,6 @@ public class ServerController {
     }
 
     @PutMapping("/{id}")
-    @Operation(summary = "Update a server", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Server> update(@PathVariable("id") Long id, @Valid @RequestBody Server updatedServer) {
         Optional<Server> updated = service.update(id, updatedServer);
         return updated
@@ -71,7 +68,6 @@ public class ServerController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Delete a server", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Server> delete(@PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

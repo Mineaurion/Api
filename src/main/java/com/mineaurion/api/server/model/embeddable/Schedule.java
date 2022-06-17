@@ -11,7 +11,7 @@ import java.util.List;
 @Embeddable
 public class Schedule {
 
-    @Size(min = 3, max = 5)
+    @Size(max = 5)
     @Valid
     @Column(name = "reboot")
     @ElementCollection(targetClass = String.class)

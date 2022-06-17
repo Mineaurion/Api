@@ -47,7 +47,6 @@ public class Server {
     @Valid
     private Administration administration;
 
-    @NotNull
     @Embedded
     @Valid
     private Schedule schedule;
