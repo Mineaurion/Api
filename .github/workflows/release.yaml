@@ -25,4 +25,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            build/libs/[!plain]*.jar
+            build/libs/*.jar
