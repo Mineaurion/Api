@@ -27,6 +27,10 @@ public class ServerService {
         return repository.findByAdministrationExternalId(id);
     }
 
+    public Optional<Server> findByDns(String dns){
+        return repository.findByDns(dns);
+    }
+
     public Server create(Server server) {
         return repository.save(server);
     }

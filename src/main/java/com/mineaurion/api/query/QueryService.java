@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -42,6 +43,11 @@ public class QueryService {
             list.add(this.getQueryServer(server));
         });
         return list;
+    }
+
+    public Optional<QueryServer> findOneByDns(String dns) {
+        Optional<Server> server = this.service.findByDns(dns);
+        return server.map(this::getQueryServer);
     }
 
     public Integer getPlayerCount() {
@@ -75,6 +81,16 @@ public class QueryService {
             list.add(this.getOldQueryServer(server));
         });
         return list;
+    }
+
+    /**
+     * @deprecated use {@link #findOneByDns(String)} ()} instead.
+     * The method will be deleted 2 month after the first release of this api.
+     */
+    @Deprecated
+    public Optional<OldQueryServer> findOneOldQueryByDns(String dns){
+        Optional<Server> server = this.service.findByDns(dns);
+        return server.map(this::getOldQueryServer);
     }
 
 
