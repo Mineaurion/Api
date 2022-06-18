@@ -1,5 +1,6 @@
 package com.mineaurion.api.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +14,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${auth.token}")
-    private String configToken;
+    @Autowired
+    private TokenFilter tokenFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -24,7 +25,7 @@ public class SecurityConfig {
                 .exceptionHandling()
                 .and()
                 .csrf().disable()
-                .addFilterAfter(new TokenFilter(configToken), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(tokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .mvcMatchers(
                         HttpMethod.GET,
