@@ -1,13 +1,13 @@
 package com.mineaurion.api.query;
 
 import com.mineaurion.api.query.model.QueryServer;
-import com.mineaurion.api.server.model.Server;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,9 +23,24 @@ public class QueryController {
     }
 
     @GetMapping
-    @Operation(summary = "Get query response from all the server")
-    public ResponseEntity<List<QueryServer>> getAllQuery() {
-        return ResponseEntity.ok().body(service.findAll());
+    @ResponseBody
+    @Operation(
+            summary = "Get query response from all the server",
+            parameters = {
+                    @Parameter(name = "sortField", in = ParameterIn.QUERY, schema = @Schema(type = "string"), example = "id"),
+                    @Parameter(name = "sortOrder", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = {"ASC", "DESC"}))
+            }
+    )
+    public ResponseEntity<List<QueryServer>> getAllQuery(
+            @RequestParam(name = "sortField", defaultValue = "id") String sortField,
+            @RequestParam(name = "sortOrder", defaultValue = "ASC") String sortOder
+    ) {
+        try {
+            Sort.Direction sortDirection = Sort.Direction.valueOf(sortOder);
+            return ResponseEntity.ok().body(service.findAll(sortDirection, sortField));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/{dns}")

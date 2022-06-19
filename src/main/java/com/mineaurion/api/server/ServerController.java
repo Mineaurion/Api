@@ -1,19 +1,19 @@
 package com.mineaurion.api.server;
 
 import com.mineaurion.api.server.model.Server;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -28,8 +28,23 @@ public class ServerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Server>> findAll() {
-        return ResponseEntity.ok().body(service.findAll());
+    @ResponseBody
+    @Operation(
+            parameters = {
+                    @Parameter(name = "sortField", in = ParameterIn.QUERY, schema = @Schema(type = "string"), example = "id"),
+                    @Parameter(name = "sortOrder", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = {"ASC", "DESC"}))
+            }
+    )
+    public ResponseEntity<List<Server>> findAll(
+            @RequestParam(name = "sortField", defaultValue = "id") String sortField,
+            @RequestParam(name = "sortOrder", defaultValue = "ASC") String sortOder
+    ) {
+        try {
+            Sort.Direction sortDirection = Sort.Direction.valueOf(sortOder);
+            return ResponseEntity.ok().body(service.findAll(sortDirection, sortField));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/{id}")
@@ -71,18 +86,5 @@ public class ServerController {
     public ResponseEntity<Server> delete(@PathVariable("id") Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
-        Map<String, String> map = new HashMap<>(errors.size());
-        errors.forEach(error -> {
-            map.put(
-                    ((FieldError) error).getField(),
-                    error.getDefaultMessage()
-            );
-        });
-        return ResponseEntity.badRequest().body(map);
     }
 }

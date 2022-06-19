@@ -7,6 +7,7 @@ import com.mineaurion.api.server.ServerService;
 import com.mineaurion.api.server.model.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
@@ -37,12 +38,16 @@ public class QueryService {
         return new QueryServer(server, query);
     }
 
-    public List<QueryServer> findAll() {
+    public List<QueryServer> findAll(Sort.Direction sortDirection, String sortField) {
         List<QueryServer> list = new ArrayList<>();
-        this.service.findAll().forEach(server -> {
+        this.service.findAll(sortDirection, sortField).forEach(server -> {
             list.add(this.getQueryServer(server));
         });
         return list;
+    }
+
+    public List<QueryServer> findAll() {
+        return this.findAll(Sort.Direction.ASC, "id");
     }
 
     public Optional<QueryServer> findOneByDns(String dns) {
