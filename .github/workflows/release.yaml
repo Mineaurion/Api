@@ -26,3 +26,20 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
             build/libs/*.jar
+
+      - name: Publish Npm Package
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@mineaurion'
+      - run: npm publish
+        working-directory: ./application/build/typescript-generator
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish Gradle Package
+        run: ./gradlew :library:build -x test :library:publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

@@ -137,4 +137,15 @@ public class Server {
                 server.schedule
         );
     }
+
+    public com.mineaurion.api.library.model.query.Server toQueryServer(){
+        return new com.mineaurion.api.library.model.query.Server(
+                getName(),
+                new com.mineaurion.api.library.model.query.Version(getVersion().getMinecraft(), getVersion().getModpack()),
+                getType(),
+                new com.mineaurion.api.library.model.query.Access(getAccess().isBeta(), getAccess().isDonator(), getAccess().isPaying()),
+                getDns(),
+                new com.mineaurion.api.library.model.query.Schedule(getSchedule().getReboot())
+        );
+    }
 }

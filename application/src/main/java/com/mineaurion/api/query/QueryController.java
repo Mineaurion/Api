@@ -1,6 +1,6 @@
 package com.mineaurion.api.query;
 
-import com.mineaurion.api.query.model.QueryServer;
+import com.mineaurion.api.library.model.query.Server;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -31,7 +31,7 @@ public class QueryController {
                     @Parameter(name = "sortOrder", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = {"ASC", "DESC"}))
             }
     )
-    public ResponseEntity<List<QueryServer>> getAllQuery(
+    public ResponseEntity<List<Server>> getAllQuery(
             @RequestParam(name = "sortField", defaultValue = "id") String sortField,
             @RequestParam(name = "sortOrder", defaultValue = "ASC") String sortOder
     ) {
@@ -45,7 +45,7 @@ public class QueryController {
 
     @GetMapping("/{dns}")
     @Operation(summary = "Get query response for a server by dns")
-    public ResponseEntity<QueryServer> getOneQuery(@PathVariable("dns") String dns){
+    public ResponseEntity<Server> getOneQuery(@PathVariable("dns") String dns){
         return ResponseEntity.of(service.findOneByDns(dns));
     }
 
