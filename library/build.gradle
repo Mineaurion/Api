@@ -1,0 +1,24 @@
+plugins {
+	id 'java'
+	id 'maven-publish'
+}
+
+sourceCompatibility = '17'
+
+publishing {
+	publications {
+		gpr(MavenPublication) {
+			from(components.java)
+		}
+	}
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = "https://maven.pkg.github.com/Mineaurion/api"
+			credentials {
+				username = System.getenv("GITHUB_ACTOR")
+				password = System.getenv("GITHUB_TOKEN")
+			}
+		}
+	}
+}

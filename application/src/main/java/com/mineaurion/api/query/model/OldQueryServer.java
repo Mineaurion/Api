@@ -3,8 +3,9 @@ package com.mineaurion.api.query.model;
 import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.server.model.Server;
 
+
 /**
- * @deprecated use {@link QueryServer} instead.
+ * @deprecated use {@link com.mineaurion.api.library.model.query.Server} instead.
  * The class will be deleted 2 month after the first release of this api.
  */
 @Deprecated

@@ -2,11 +2,8 @@ package com.mineaurion.api.query;
 
 import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.query.model.OldQueryServer;
-import com.mineaurion.api.query.model.QueryServer;
+import com.mineaurion.api.library.model.query.Server;
 import com.mineaurion.api.server.ServerService;
-import com.mineaurion.api.server.model.Server;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
@@ -20,9 +17,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @EnableAsync
 public class QueryService {
 
-    Logger logger = LoggerFactory.getLogger(QueryService.class);
-    private final String errorLog = "The server %s with address %s:%s could not be contacted. Caused by : %s";
-
     private final ServerService service;
     private final MinecraftQueryService minecraftQueryService;
 
@@ -31,27 +25,32 @@ public class QueryService {
         this.minecraftQueryService = minecraftQueryService;
     }
 
-    private QueryServer getQueryServer(Server server){
+    private Server getQueryServer(com.mineaurion.api.server.model.Server server){
         String address = server.getAdministration().getQuery().getIp();
         Integer port = server.getAdministration().getQuery().getPort();
         MCQuery query = this.minecraftQueryService.getQueryResponse(server.getName(), address, port);
-        return new QueryServer(server, query);
+        return server
+                .toQueryServer()
+                .setStatus(query.getStatus())
+                .setOnlinePlayers(query.getOnlinePlayers())
+                .setMaxPlayers(query.getMaxPlayers())
+                .setPlayers(query.getPlayerList());
     }
 
-    public List<QueryServer> findAll(Sort.Direction sortDirection, String sortField) {
-        List<QueryServer> list = new ArrayList<>();
+    public List<Server> findAll(Sort.Direction sortDirection, String sortField) {
+        List<Server> list = new ArrayList<>();
         this.service.findAll(sortDirection, sortField).forEach(server -> {
             list.add(this.getQueryServer(server));
         });
         return list;
     }
 
-    public List<QueryServer> findAll() {
+    public List<Server> findAll() {
         return this.findAll(Sort.Direction.ASC, "id");
     }
 
-    public Optional<QueryServer> findOneByDns(String dns) {
-        Optional<Server> server = this.service.findByDns(dns);
+    public Optional<Server> findOneByDns(String dns) {
+        Optional<com.mineaurion.api.server.model.Server> server = this.service.findByDns(dns);
         return server.map(this::getQueryServer);
     }
 
@@ -64,11 +63,11 @@ public class QueryService {
     }
 
     /**
-     * @deprecated use {@link #getQueryServer(Server)} instead.
+     * @deprecated use {@link #getQueryServer(com.mineaurion.api.server.model.Server)} instead.
      * The method will be deleted 2 month after the first release of this api.
      */
     @Deprecated
-    private OldQueryServer getOldQueryServer(Server server){
+    private OldQueryServer getOldQueryServer(com.mineaurion.api.server.model.Server server){
         String address = server.getAdministration().getQuery().getIp();
         Integer port = server.getAdministration().getQuery().getPort();
         MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(server.getName(), address, port);
@@ -94,7 +93,7 @@ public class QueryService {
      */
     @Deprecated
     public Optional<OldQueryServer> findOneOldQueryByDns(String dns){
-        Optional<Server> server = this.service.findByDns(dns);
+        Optional<com.mineaurion.api.server.model.Server> server = this.service.findByDns(dns);
         return server.map(this::getOldQueryServer);
     }
 
