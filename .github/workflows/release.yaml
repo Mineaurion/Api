@@ -25,7 +25,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            build/libs/*.jar
+            application/build/libs/*.jar
 
       - name: Publish Npm Package
         uses: actions/setup-node@v3
