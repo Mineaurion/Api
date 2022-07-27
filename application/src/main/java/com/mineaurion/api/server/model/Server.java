@@ -143,7 +143,7 @@ public class Server {
                 getName(),
                 new com.mineaurion.api.library.model.query.Version(getVersion().getMinecraft(), getVersion().getModpack()),
                 getType(),
-                new com.mineaurion.api.library.model.query.Access(getAccess().isBeta(), getAccess().isDonator(), getAccess().isPaying()),
+                new com.mineaurion.api.library.model.query.Access(getAccess().isBeta(), getAccess().isPaying(), getAccess().isDonator()),
                 getDns(),
                 new com.mineaurion.api.library.model.query.Schedule(getSchedule().getReboot())
         );
