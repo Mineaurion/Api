@@ -2,6 +2,7 @@ package com.mineaurion.api.server;
 
 import com.mineaurion.api.server.model.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,12 @@ public class ServerService {
 
     @Autowired
     private ServerRepository repository;
+
+    public List<Server> findAll(Sort.Direction sortDirection, String sortField, boolean hidden) {
+        Server server = new Server();
+        server.setHidden(hidden);
+        return repository.findAll(Example.of(server), Sort.by(sortDirection, sortField));
+    }
 
     public List<Server> findAll(Sort.Direction sortDirection, String sortField) {
         return repository.findAll(Sort.by(sortDirection, sortField));

@@ -6,6 +6,7 @@ import com.mineaurion.api.server.model.embeddable.Administration;
 import com.mineaurion.api.server.model.embeddable.Schedule;
 import com.mineaurion.api.server.model.embeddable.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -51,7 +52,11 @@ public class Server {
     @Valid
     private Schedule schedule;
 
-    public Server(Long id, String name, Version version, String type, Access access, String dns, Administration administration, Schedule schedule) {
+    @NotNull
+    @Valid
+    private boolean hidden = false;
+
+    public Server(Long id, String name, Version version, String type, Access access, String dns, Administration administration, Schedule schedule, boolean hidden) {
         this.id = id;
         this.name = name;
         this.version = version;
@@ -60,6 +65,7 @@ public class Server {
         this.dns = dns;
         this.administration = administration;
         this.schedule = schedule;
+        this.hidden = hidden;
     }
 
     public Server() {
@@ -125,6 +131,14 @@ public class Server {
         this.schedule = schedule;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
     public Server updateWith(Server server) {
         return new Server(
                 this.id,
@@ -134,7 +148,8 @@ public class Server {
                 server.access,
                 server.dns,
                 server.administration,
-                server.schedule
+                server.schedule,
+                server.hidden
         );
     }
 

@@ -1,7 +1,6 @@
 package com.mineaurion.api.query;
 
 import com.mineaurion.api.query.lib.MCQuery;
-import com.mineaurion.api.query.model.OldQueryServer;
 import com.mineaurion.api.library.model.query.Server;
 import com.mineaurion.api.server.ServerService;
 import org.springframework.data.domain.Sort;
@@ -39,7 +38,7 @@ public class QueryService {
 
     public List<Server> findAll(Sort.Direction sortDirection, String sortField) {
         List<Server> list = new ArrayList<>();
-        this.service.findAll(sortDirection, sortField).forEach(server -> {
+        this.service.findAll(sortDirection, sortField, false).forEach(server -> {
             list.add(this.getQueryServer(server));
         });
         return list;
@@ -61,41 +60,4 @@ public class QueryService {
         });
         return numberOfPlayerOnline.get();
     }
-
-    /**
-     * @deprecated use {@link #getQueryServer(com.mineaurion.api.server.model.Server)} instead.
-     * The method will be deleted 2 month after the first release of this api.
-     */
-    @Deprecated
-    private OldQueryServer getOldQueryServer(com.mineaurion.api.server.model.Server server){
-        String address = server.getAdministration().getQuery().getIp();
-        Integer port = server.getAdministration().getQuery().getPort();
-        MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(server.getName(), address, port);
-        return new OldQueryServer(server, queryResponse);
-    }
-
-    /**
-     * @deprecated use {@link #findAll()} instead.
-     * The method will be deleted 2 month after the first release of this api.
-     */
-    @Deprecated
-    public List<OldQueryServer> findAllOldQuery(){
-        List<OldQueryServer> list = new ArrayList<>();
-        this.service.findAll().forEach(server -> {
-            list.add(this.getOldQueryServer(server));
-        });
-        return list;
-    }
-
-    /**
-     * @deprecated use {@link #findOneByDns(String)} ()} instead.
-     * The method will be deleted 2 month after the first release of this api.
-     */
-    @Deprecated
-    public Optional<OldQueryServer> findOneOldQueryByDns(String dns){
-        Optional<com.mineaurion.api.server.model.Server> server = this.service.findByDns(dns);
-        return server.map(this::getOldQueryServer);
-    }
-
-
 }
