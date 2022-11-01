@@ -8,7 +8,7 @@ buildscript {
 	dependencies {
 		classpath 'cz.habarta.typescript-generator:typescript-generator-gradle-plugin:2.36.1070'
 		classpath 'cz.habarta.typescript-generator:typescript-generator-spring:2.36.1070'
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.7.1"
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.7.5"
 		classpath "io.spring.gradle:dependency-management-plugin:1.0.12.RELEASE"
 		classpath "gradle.plugin.org.flywaydb:gradle-plugin-publishing:8.5.12"
 	}
