@@ -1,7 +1,7 @@
 package com.mineaurion.api.query;
 
-import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.library.model.query.Server;
+import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.server.ServerService;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.EnableAsync;

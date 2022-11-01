@@ -6,7 +6,6 @@ import com.mineaurion.api.server.model.embeddable.Administration;
 import com.mineaurion.api.server.model.embeddable.Schedule;
 import com.mineaurion.api.server.model.embeddable.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.Valid;
