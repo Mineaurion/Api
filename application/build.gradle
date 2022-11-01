@@ -43,7 +43,7 @@ dependencies {
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.9.0'
 
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
-	implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.9'
+	implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.12'
 	implementation 'org.springdoc:springdoc-openapi-security:1.6.9'
 
 	implementation project(':library')
