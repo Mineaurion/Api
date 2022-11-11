@@ -1,5 +1,6 @@
 package com.mineaurion.api.server;
 
+import com.mineaurion.api.library.model.prometheus.PrometheusSD;
 import com.mineaurion.api.server.model.Server;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -32,7 +33,7 @@ public class ServerController {
     @Operation(
             parameters = {
                     @Parameter(name = "sortField", in = ParameterIn.QUERY, schema = @Schema(type = "string"), example = "id"),
-                    @Parameter(name = "sortOrder", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = {"ASC", "DESC"}))
+                    @Parameter(name = "sortOrder", in = ParameterIn.QUERY, schema = @Schema(type = "string", allowableValues = {"ASC", "DESC"})),
             }
     )
     public ResponseEntity<List<Server>> findAll(
@@ -55,6 +56,11 @@ public class ServerController {
     @GetMapping("/externalid/{id}/")
     public ResponseEntity<Server> findByExternalId(@PathVariable("id") String id) {
         return ResponseEntity.of(service.findByExternalId(id));
+    }
+
+    @GetMapping("/prometheus-sd")
+    public ResponseEntity<List<PrometheusSD>> prometheusServiceDiscovery(){
+        return ResponseEntity.of(service.getPrometheusSD());
     }
 
     @PostMapping
