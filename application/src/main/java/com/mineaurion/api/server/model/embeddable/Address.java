@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 public class Address {
 
     @NotNull
-    @Pattern(regexp = "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", message = "ne correspond pas à une addresse ip")
+    @Pattern(regexp = "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", message = "ne correspond pas à une adresse ip")
     private String ip;
 
     @NotNull

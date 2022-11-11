@@ -1,0 +1,2 @@
+ALTER TABLE server
+ADD backup BOOLEAN NOT NULL DEFAULT(true);

@@ -1,5 +1,7 @@
 package com.mineaurion.api.server;
 
+import com.mineaurion.api.library.model.prometheus.Labels;
+import com.mineaurion.api.library.model.prometheus.PrometheusSD;
 import com.mineaurion.api.server.model.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
@@ -7,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,6 +44,24 @@ public class ServerService {
 
     public Optional<Server> findByDns(String dns){
         return repository.findByDns(dns);
+    }
+
+    public Optional<List<Server>> findAllPrometheus() {
+        return repository.findByAdministrationPrometheusIsNotNull();
+    }
+
+    public Optional<List<PrometheusSD>> getPrometheusSD(){
+        Optional<List<Server>> servers = this.findAllPrometheus();
+        List<PrometheusSD> prometheusSd = new ArrayList<>();
+        servers.ifPresent(serverList -> serverList.forEach(server -> {
+            prometheusSd.add(
+                    new PrometheusSD(
+                            server.getAdministration().getPrometheus().getIp() + ":" + server.getAdministration().getPrometheus().getPort(),
+                            new Labels(server.getVersion().getMinecraft(), server.getName())
+                    )
+            );
+        }));
+        return Optional.of(prometheusSd);
     }
 
     public Server create(Server server) {
