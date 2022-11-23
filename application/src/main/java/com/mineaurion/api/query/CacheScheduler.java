@@ -31,7 +31,7 @@ public class CacheScheduler {
     @Autowired
     private MinecraftQueryService minecraftQueryService;
 
-    @Scheduled(fixedRate = 120000 )
+    @Scheduled(fixedRate = 120 * 1000 )
     public void refreshCacheQueryServer(){
         logger.info("Refreshing query server cache");
         Cache cache = this.cacheManager.getCache("queryResponse");

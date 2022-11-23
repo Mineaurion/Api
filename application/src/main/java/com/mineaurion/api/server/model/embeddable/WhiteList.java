@@ -5,13 +5,8 @@ import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class WhiteList {
-
-
-    @NotNull
-    private boolean buy;
-
-    @NotNull
-    private boolean donator;
+    private boolean buy = false;
+    private boolean donator = false;
 
     public WhiteList(boolean buy, boolean donator) {
         this.buy = buy;
