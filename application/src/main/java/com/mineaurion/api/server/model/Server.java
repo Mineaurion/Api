@@ -9,17 +9,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Entity
-// TODO: ajouter des options pour la supervision prometheus cf: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#http_sd_config
 public class Server {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotNull
+    @NotEmpty
     @Schema(example = "Ultimate 1.4.7")
     private String name;
 
@@ -29,6 +30,7 @@ public class Server {
     private Version version;
 
     @NotNull
+    @NotEmpty
     @Pattern(regexp = "^(overworld|skyblock)$", message = "Le type doit être soit overworld soit skyblock")
     private String type;
 
@@ -38,6 +40,7 @@ public class Server {
     private Access access;
 
     @NotNull
+    @NotEmpty
     @Pattern(regexp = "^[a-zA-Z\\d .-]+$", message = "ne correspond pas à un nom de domaine")
     @Schema(example = "ultimate.mineaurion.com")
     private String dns;
@@ -52,7 +55,6 @@ public class Server {
     private Schedule schedule;
 
     @NotNull
-    @Valid
     private boolean hidden = false;
 
     public Server(Long id, String name, Version version, String type, Access access, String dns, Administration administration, Schedule schedule, boolean hidden) {

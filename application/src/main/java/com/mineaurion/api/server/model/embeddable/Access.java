@@ -5,15 +5,9 @@ import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class Access {
-
-    @NotNull
-    private boolean beta;
-
-    @NotNull
-    private boolean paying;
-
-    @NotNull
-    private boolean donator;
+    private boolean beta = false;
+    private boolean paying = false;
+    private boolean donator = false;
 
     public Access() {
     }
