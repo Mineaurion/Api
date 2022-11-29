@@ -31,7 +31,7 @@ public class MinecraftQueryService {
         try {
             mcQuery.sendQueryRequest();
         } catch (IOException e){
-            if(this.errorServer.containsKey(address) && this.errorServer.get(address) == 20){
+            if(this.errorServer.containsKey(address) && this.errorServer.get(address) == 60){
                 try {
                     String content = env.getProperty("discord.webhook.message").formatted(name);
                     new Webhook(env.getProperty("discord.webhook"))
