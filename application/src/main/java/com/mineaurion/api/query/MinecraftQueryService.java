@@ -30,6 +30,8 @@ public class MinecraftQueryService {
         MCQuery mcQuery = new MCQuery(address, port);
         try {
             mcQuery.sendQueryRequest();
+            // TODO: temp workaround need a better one
+            this.resetToZero(address, name);
         } catch (IOException e){
             if(this.errorServer.containsKey(address) && this.errorServer.get(address) == 30){
                 try {
@@ -40,12 +42,16 @@ public class MinecraftQueryService {
                 } catch (IOException exception){
                     logger.error("Error when sending the discord webhook " + exception.getMessage());
                 }
-                logger.info("Reset to zero the number of query request attempts for " + name);
-                this.errorServer.put(address, 0);
+                this.resetToZero(address, name);
             }
             this.errorServer.put(address, this.errorServer.getOrDefault(address, 0) + 1);
             logger.error(errorLog.formatted(name, address, port, e.getMessage()));
         }
         return mcQuery;
+    }
+
+    private void resetToZero(String address, String name) {
+        logger.info("Reset to zero the number of query request attempts for " + name);
+        this.errorServer.put(address, 0);
     }
 }
