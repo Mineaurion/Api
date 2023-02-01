@@ -41,7 +41,7 @@ dependencies {
 	implementation 'org.flywaydb:flyway-mysql:8.5.12'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.6'
 
-	implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.5'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.2'
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.10.1'
 
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
