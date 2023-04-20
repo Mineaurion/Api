@@ -1,5 +1,6 @@
 package com.mineaurion.api.query;
 
+import com.mineaurion.api.library.model.query.Schedule;
 import com.mineaurion.api.library.model.query.Server;
 import com.mineaurion.api.query.lib.MCQuery;
 import com.mineaurion.api.server.ServerService;
@@ -8,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -19,21 +21,31 @@ public class QueryService {
     private final ServerService service;
     private final MinecraftQueryService minecraftQueryService;
 
-    public QueryService(ServerService service, MinecraftQueryService minecraftQueryService) {
+    private final PterodactylQueryService pterodactylQueryService;
+
+    public QueryService(ServerService service, MinecraftQueryService minecraftQueryService, PterodactylQueryService pterodactylQueryService) {
         this.service = service;
         this.minecraftQueryService = minecraftQueryService;
+        this.pterodactylQueryService = pterodactylQueryService;
     }
 
     private Server getQueryServer(com.mineaurion.api.server.model.Server server){
-        String address = server.getAdministration().getQuery().getIp();
-        Integer port = server.getAdministration().getQuery().getPort();
-        MCQuery query = this.minecraftQueryService.getQueryResponse(server.getName(), address, port);
-        return server
+        MCQuery query = this.minecraftQueryService.getQueryResponse(
+                server.getName(),
+                server.getAdministration().getQuery().getIp(),
+                server.getAdministration().getQuery().getPort())
+                ;
+
+        Server queryServer = server
                 .toQueryServer()
                 .setStatus(query.getStatus())
                 .setOnlinePlayers(query.getOnlinePlayers())
                 .setMaxPlayers(query.getMaxPlayers())
-                .setPlayers(query.getPlayerList());
+                .setPlayers(query.getPlayerList())
+                ;
+        Optional<Date> nextReboot = pterodactylQueryService.getNextRebootSchedule(server.getAdministration().getExternalId());
+        nextReboot.ifPresent(date -> queryServer.setSchedule(new Schedule(date.getTime() / 1000)));
+        return queryServer;
     }
 
     public List<Server> findAll(Sort.Direction sortDirection, String sortField) {

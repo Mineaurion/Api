@@ -17,39 +17,14 @@ public class Server {
             Version version,
             String type,
             Access access,
-            String dns,
-            Schedule schedule,
-            boolean status,
-            Integer onlinePlayers,
-            Integer maxPlayers,
-            String[] players
+            String dns
     ) {
         this.name = name;
         this.version = version;
         this.type = type;
         this.access = access;
         this.dns = dns;
-        this.schedule = schedule;
-        this.status = status;
-        this.onlinePlayers = onlinePlayers;
-        this.maxPlayers = maxPlayers;
-        this.players = players;
-    }
-
-    public Server(
-            String name,
-            Version version,
-            String type,
-            Access access,
-            String dns,
-            Schedule schedule
-    ) {
-        this.name = name;
-        this.version = version;
-        this.type = type;
-        this.access = access;
-        this.dns = dns;
-        this.schedule = schedule;
+        this.schedule = new Schedule();
     }
 
     public Server(){}
