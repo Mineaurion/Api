@@ -1,20 +1,24 @@
 package com.mineaurion.api.library.model.query;
 
-import java.util.List;
-
 public class Schedule {
-    private List<String> reboot;
 
-    public Schedule(List<String> reboot) {
-        this.reboot = reboot;
+    /**
+     * Contains the timestamp of nextreboot
+     */
+    private Long nextReboot;
+
+    public Schedule(Long nextReboot ) {
+        this.nextReboot = nextReboot;
     }
 
-    public List<String> getReboot() {
-        return reboot;
+    public Schedule(){};
+
+    public Long getnextReboot() {
+        return nextReboot;
     }
 
-    public Schedule setReboot(List<String> reboot) {
-        this.reboot = reboot;
+    public Schedule setnextReboot(Long nextReboot) {
+        this.nextReboot = nextReboot;
         return this;
     }
 }

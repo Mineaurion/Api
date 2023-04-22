@@ -1,12 +1,11 @@
 package com.mineaurion.api.query;
 
 import com.mineaurion.api.library.model.query.Access;
-import com.mineaurion.api.library.model.query.Schedule;
 import com.mineaurion.api.library.model.query.Server;
 import com.mineaurion.api.library.model.query.Version;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,8 +36,7 @@ public class QueryControllerTest {
             new Version("1.0.0", "1.0.0"),
             "skyblock",
             new Access(false, false, false),
-            "dns.example.com",
-            new Schedule(Arrays.asList("09h00", "10h00"))
+            "dns.example.com"
     );
 
     @Test

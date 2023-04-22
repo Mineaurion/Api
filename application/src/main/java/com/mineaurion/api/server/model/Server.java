@@ -3,7 +3,6 @@ package com.mineaurion.api.server.model;
 
 import com.mineaurion.api.server.model.embeddable.Access;
 import com.mineaurion.api.server.model.embeddable.Administration;
-import com.mineaurion.api.server.model.embeddable.Schedule;
 import com.mineaurion.api.server.model.embeddable.Version;
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -50,14 +49,10 @@ public class Server {
     @Valid
     private Administration administration;
 
-    @Embedded
-    @Valid
-    private Schedule schedule;
-
-    @NotNull
+    @Schema(defaultValue = "false")
     private boolean hidden = false;
 
-    public Server(Long id, String name, Version version, String type, Access access, String dns, Administration administration, Schedule schedule, boolean hidden) {
+    public Server(Long id, String name, Version version, String type, Access access, String dns, Administration administration, boolean hidden) {
         this.id = id;
         this.name = name;
         this.version = version;
@@ -65,7 +60,6 @@ public class Server {
         this.access = access;
         this.dns = dns;
         this.administration = administration;
-        this.schedule = schedule;
         this.hidden = hidden;
     }
 
@@ -124,14 +118,6 @@ public class Server {
         this.administration = administration;
     }
 
-    public Schedule getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-    }
-
     public boolean isHidden() {
         return hidden;
     }
@@ -149,7 +135,6 @@ public class Server {
                 server.access,
                 server.dns,
                 server.administration,
-                server.schedule,
                 server.hidden
         );
     }
@@ -160,8 +145,7 @@ public class Server {
                 new com.mineaurion.api.library.model.query.Version(getVersion().getMinecraft(), getVersion().getModpack()),
                 getType(),
                 new com.mineaurion.api.library.model.query.Access(getAccess().isBeta(), getAccess().isPaying(), getAccess().isDonator()),
-                getDns(),
-                new com.mineaurion.api.library.model.query.Schedule(getSchedule().getReboot())
+                getDns()
         );
     }
 }
