@@ -43,17 +43,15 @@ public class PterodactylQueryService {
                 JsonArray data = JsonParser.parseString(response.body()).getAsJsonObject().get("data").getAsJsonArray();
                 Type listOfSchedule =  new TypeToken<ArrayList<Schedule>>(){}.getType();
                 List<Schedule> serverSchedules = new Gson().fromJson(data, listOfSchedule);
+                NavigableSet<Date> nextSchedules = new TreeSet<>();
                 if(!serverSchedules.isEmpty()){
                     for (Schedule schedule: serverSchedules) {
                         if(schedule.getAttributes().getName().toLowerCase().contains("reboot")){
-                            if(nextSchedule.isEmpty()){
-                                nextSchedule = Optional.ofNullable(schedule.getAttributes().getNext_run_at());
-                            }
-                            if(schedule.getAttributes().getNext_run_at().before(nextSchedule.get())){
-                                nextSchedule = Optional.ofNullable(schedule.getAttributes().getNext_run_at());
-                            }
+                            nextSchedules.add(schedule.getAttributes().getNext_run_at());
                         }
                     }
+                    Date now = new Date();
+                    nextSchedule = Optional.ofNullable(nextSchedules.higher(now));
                 }
             }
         } catch (IOException | InterruptedException e) {
