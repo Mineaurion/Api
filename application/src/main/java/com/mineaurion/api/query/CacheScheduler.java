@@ -31,7 +31,7 @@ public class CacheScheduler {
     @Autowired
     private MinecraftQueryService minecraftQueryService;
 
-    @Scheduled(fixedRate = 120 * 1000 )
+    @Scheduled(fixedRate = 120 * 1000)
     public void refreshCacheQueryServer(){
         logger.info("Refreshing query server cache");
         Cache cache = this.cacheManager.getCache("queryResponse");
@@ -41,6 +41,15 @@ public class CacheScheduler {
                 this.taskExecutor.submit( () -> refreshCache(server.getName(), server.getAdministration().getQuery().getIp(), server.getAdministration().getQuery().getPort(), cache));
             });
 
+        }
+    }
+
+    @Scheduled(fixedRate = 120 * 1000)
+    public void deleteNextRebootScheduleCache(){
+        logger.info("Delete nextRebootSchedule cache");
+        Cache cache = this.cacheManager.getCache("nextRebootSchedule");
+        if(cache != null){
+            cache.clear();
         }
     }
 
