@@ -6,10 +6,10 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'cz.habarta.typescript-generator:typescript-generator-gradle-plugin:2.36.1070'
-		classpath 'cz.habarta.typescript-generator:typescript-generator-spring:2.36.1070'
-		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.7.5"
-		classpath "io.spring.gradle:dependency-management-plugin:1.0.12.RELEASE"
+		classpath 'cz.habarta.typescript-generator:typescript-generator-gradle-plugin:3.2.1263'
+		classpath 'cz.habarta.typescript-generator:typescript-generator-spring:3.2.1263'
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:3.0.6"
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.15.RELEASE"
 		classpath "gradle.plugin.org.flywaydb:gradle-plugin-publishing:8.5.12"
 	}
 }
@@ -33,21 +33,20 @@ springBoot {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.7.5'
-	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.5'
-	implementation 'org.springframework.boot:spring-boot-starter-security:2.7.5'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.5'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
-	implementation 'org.springframework.boot:spring-boot-starter-cache:2.7.5'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket:3.0.6'
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.0.6'
+	implementation 'org.springframework.boot:spring-boot-starter-security:3.0.6'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux:3.0.6'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.0.6'
+	implementation 'org.springframework.boot:spring-boot-starter-cache:3.0.6'
 	implementation 'org.flywaydb:flyway-mysql:8.5.12'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.6'
 
-	implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.5'
-	implementation 'io.micrometer:micrometer-registry-prometheus:1.10.1'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.6'
+	implementation 'io.micrometer:micrometer-registry-prometheus:1.10.6'
 
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
-	implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.13'
-	implementation 'org.springdoc:springdoc-openapi-security:1.6.13'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-common:2.1.0'
 
 	implementation project(':library')
 
@@ -56,13 +55,13 @@ dependencies {
 	testImplementation "org.testcontainers:testcontainers:1.17.6"
 	testImplementation "org.testcontainers:junit-jupiter:1.17.6"
 	testImplementation "org.testcontainers:mariadb:1.17.6"
-	testImplementation 'org.springframework.security:spring-security-test:5.7.3'
-	testImplementation('org.springframework.boot:spring-boot-starter-test:2.7.5') {
+	testImplementation 'org.springframework.security:spring-security-test:6.0.3'
+	testImplementation('org.springframework.boot:spring-boot-starter-test:3.0.6') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	testImplementation 'net.datafaker:datafaker:1.7.0'
-	testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
-	testImplementation 'com.squareup.okhttp3:okhttp:4.10.0'
+	testImplementation 'net.datafaker:datafaker:1.9.0'
+	testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
+	testImplementation 'com.squareup.okhttp3:okhttp:4.11.0'
 
 }
 

@@ -3,7 +3,6 @@ package com.mineaurion.api.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -25,13 +24,11 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()
                 .addFilterAfter(tokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .mvcMatchers(
-                        HttpMethod.GET,
-                        "/swagger-doc/**", "/swagger-ui/**", "/v1/**", "/query/**", "/actuator/**"
-                ).permitAll()
+                .authorizeHttpRequests( authorize -> authorize
+                        .requestMatchers("/swagger-doc/**", "/swagger-ui/**", "/v1/**", "/query/**", "/actuator/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 // .antMatchers("/h2-console/**", "/h2-console").permitAll()
-                .anyRequest().authenticated()
         ;
 
         return http.build();

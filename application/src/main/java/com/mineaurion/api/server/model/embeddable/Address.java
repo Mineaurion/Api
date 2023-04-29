@@ -1,9 +1,9 @@
 package com.mineaurion.api.server.model.embeddable;
 
-import javax.persistence.Embeddable;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Embeddable
 public class Address {

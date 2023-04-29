@@ -2,15 +2,15 @@ package com.mineaurion.api.server.model.embdeddable;
 
 import com.mineaurion.api.Faker;
 import com.mineaurion.api.server.model.embeddable.Address;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;

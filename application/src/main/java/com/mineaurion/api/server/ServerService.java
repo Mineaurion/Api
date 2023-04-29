@@ -3,12 +3,12 @@ package com.mineaurion.api.server;
 import com.mineaurion.api.library.model.prometheus.Labels;
 import com.mineaurion.api.library.model.prometheus.PrometheusSD;
 import com.mineaurion.api.server.model.Server;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
