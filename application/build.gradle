@@ -36,11 +36,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket:2.7.5'
 	implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.5'
 	implementation 'org.springframework.boot:spring-boot-starter-security:2.7.5'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.5'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.5'
 	implementation 'org.springframework.boot:spring-boot-starter-cache:2.7.5'
 	implementation 'org.flywaydb:flyway-mysql:8.5.12'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.6'
-	implementation 'com.google.code.gson:gson:2.8.9'
 
 	implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.5'
 	implementation 'io.micrometer:micrometer-registry-prometheus:1.10.1'
@@ -60,6 +60,10 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test:2.7.5') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	testImplementation 'net.datafaker:datafaker:1.7.0'
+	testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
+	testImplementation 'com.squareup.okhttp3:okhttp:4.10.0'
+
 }
 
 jar {
@@ -111,6 +115,12 @@ jacocoTestReport {
 		csv.enabled false
 		html.enabled true
 		html.destination file("$buildDir/reports/jacoco")
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: 'com/mineaurion/api/query/lib/**')
+		}))
 	}
 }
 

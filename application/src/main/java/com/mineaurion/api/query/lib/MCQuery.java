@@ -1,5 +1,7 @@
 package com.mineaurion.api.query.lib;
 
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,82 +13,28 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Lib from GitHub, couple modification to add some getter. See the link below
  * @see <a href="https://github.com/ryan-shaw/MCJQuery">MCJQuery</a>
  */
+
+@Service
 public class MCQuery {
-    /**
-     * The target address and port
-     */
-    private final InetSocketAddress address;
-    private final InetSocketAddress queryAddress;
     /**
      * <code>null</code> if no successful request has been sent, otherwise a Map
      * containing any metadata received except the player list
      */
-    private final Map<String, String>	values = new HashMap<>();
-    /**
-     * <code>null</code> if no successful request has been sent, otherwise an
-     * array containing all online player usernames
-     */
-    private String[] playerList = new String[0];
-
-    private boolean status = false;
-
-    public MCQuery(String host, int port) {
-        this(new InetSocketAddress(host, port), new InetSocketAddress(host, port));
-    }
-
-    /**
-     * Create a new instance of this class
-     * @param address The servers IP-address
-     */
-    public MCQuery(InetSocketAddress queryAddress, InetSocketAddress address) {
-        this.address = address;
-        this.queryAddress = queryAddress;
-    }
-
-    /**
-     * Get the additional values if the Query has been sent
-     *
-     * @return The data
-     */
-    public Map<String, String> getValues() {
-        return values;
-    }
-
-    /**
-     * Get the online usernames if the Query has been sent
-     *
-     * @return The username array
-     */
-    public String[] getPlayerList() {
-        return playerList;
-    }
-
-    public Integer getOnlinePlayers(){
-        return Integer.parseInt(getValues().getOrDefault("numplayers", "0"));
-    }
-
-    public Integer getMaxPlayers(){
-        return Integer.parseInt(getValues().getOrDefault("maxplayers", "0"));
-    }
-
-    public boolean getStatus(){
-        return status;
-    }
+    private final Map<String, String> values = new HashMap<>();
 
     /**
      * Request the UDP query
      * @throws IOException if anything goes wrong during the request
      */
-    public void sendQueryRequest() throws IOException {
-        InetSocketAddress local = queryAddress;
-        if(queryAddress.getPort() == 0){
-            local = new InetSocketAddress(queryAddress.getAddress(), address.getPort());
-        }
+    public MCQueryResponse sendQueryRequest(String host, Integer port) throws IOException {
+        InetSocketAddress address = new InetSocketAddress(host, port);
+
+        MCQueryResponse mcQueryResponse = new MCQueryResponse();
 
         try (DatagramSocket socket = new DatagramSocket()) {
             final byte[] receiveData = new byte[10240];
             socket.setSoTimeout(2000);
-            sendPacket(socket, local, 0xFE, 0xFD, 0x09, 0x01, 0x01, 0x01, 0x01);
+            sendPacket(socket, address, 0xFE, 0xFD, 0x09, 0x01, 0x01, 0x01, 0x01);
             final int challengeInteger;
             {
                 receivePacket(socket, receiveData);
@@ -97,7 +45,7 @@ public class MCQuery {
                     buffer[i++] = byte1;
                 challengeInteger = Integer.parseInt(new String(buffer).trim());
             }
-            sendPacket(socket, local, 0xFE, 0xFD, 0x00, 0x01, 0x01, 0x01, 0x01, challengeInteger >> 24, challengeInteger >> 16, challengeInteger >> 8, challengeInteger, 0x00, 0x00, 0x00, 0x00);
+            sendPacket(socket, address, 0xFE, 0xFD, 0x00, 0x01, 0x01, 0x01, 0x01, challengeInteger >> 24, challengeInteger >> 16, challengeInteger >> 8, challengeInteger, 0x00, 0x00, 0x00, 0x00);
 
             final int length = receivePacket(socket, receiveData).getLength();
             final AtomicInteger cursor = new AtomicInteger(5);
@@ -110,7 +58,7 @@ public class MCQuery {
                     values.put(s, v);
                 }
             }
-            status = true;
+            mcQueryResponse.setStatus(true);
             readString(receiveData, cursor);
             final Set<String> players = new HashSet<>();
             while (cursor.get() < length) {
@@ -118,8 +66,9 @@ public class MCQuery {
                 if (name.length() > 0)
                     players.add(name);
             }
-            playerList = players.toArray(new String[0]);
+            mcQueryResponse.setPlayerList(players.toArray(new String[0]));
         }
+        return mcQueryResponse;
     }
 
     /**

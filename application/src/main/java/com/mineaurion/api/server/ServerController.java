@@ -53,14 +53,14 @@ public class ServerController {
         return ResponseEntity.of(service.find(id));
     }
 
-    @GetMapping("/externalid/{id}/")
+    @GetMapping("/externalid/{id}")
     public ResponseEntity<Server> findByExternalId(@PathVariable("id") String id) {
         return ResponseEntity.of(service.findByExternalId(id));
     }
 
     @GetMapping("/prometheus-sd")
     public ResponseEntity<List<PrometheusSD>> prometheusServiceDiscovery(){
-        return ResponseEntity.of(service.getPrometheusSD());
+        return ResponseEntity.ok(service.getPrometheusSD());
     }
 
     @PostMapping
