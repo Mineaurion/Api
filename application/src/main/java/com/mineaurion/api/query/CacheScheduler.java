@@ -1,6 +1,6 @@
 package com.mineaurion.api.query;
 
-import com.mineaurion.api.query.lib.MCQuery;
+import com.mineaurion.api.query.lib.MCQueryResponse;
 import com.mineaurion.api.server.ServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,6 @@ public class CacheScheduler {
             this.serverService.findAll().forEach(server -> {
                 this.taskExecutor.submit( () -> refreshCache(server.getName(), server.getAdministration().getQuery().getIp(), server.getAdministration().getQuery().getPort(), cache));
             });
-
         }
     }
 
@@ -55,7 +54,7 @@ public class CacheScheduler {
 
     private void refreshCache(String name, String address, Integer port, Cache cache){
         String cacheKey = "%s-%s-%s".formatted(name, address, port);
-        MCQuery queryResponse = this.minecraftQueryService.getQueryResponse(name, address, port);
+        MCQueryResponse queryResponse = this.minecraftQueryService.getQueryResponse(name, address, port);
         cache.putIfAbsent(cacheKey, queryResponse);
     }
 }

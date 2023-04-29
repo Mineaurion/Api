@@ -1,11 +1,19 @@
 package com.mineaurion.api.server.model.embeddable;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class Access {
+
+    @Schema(defaultValue = "false")
     private boolean beta = false;
+
+    @Schema(defaultValue = "false")
     private boolean paying = false;
+
+    @Schema(defaultValue = "false")
     private boolean donator = false;
 
     public Access() {

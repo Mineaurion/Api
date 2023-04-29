@@ -1,13 +1,14 @@
 package com.mineaurion.api.server.model.embeddable;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Embeddable
 public class Address {
 
-    @NotNull
+    @NotEmpty
     @Pattern(regexp = "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$", message = "ne correspond pas à une adresse ip")
     private String ip;
 

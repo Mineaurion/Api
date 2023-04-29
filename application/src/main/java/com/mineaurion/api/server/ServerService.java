@@ -50,10 +50,9 @@ public class ServerService {
         return repository.findByAdministrationPrometheusIsNotNull();
     }
 
-    public Optional<List<PrometheusSD>> getPrometheusSD(){
-        Optional<List<Server>> servers = this.findAllPrometheus();
+    public List<PrometheusSD> getPrometheusSD(){
         List<PrometheusSD> prometheusSd = new ArrayList<>();
-        servers.ifPresent(serverList -> serverList.forEach(server -> {
+        this.findAllPrometheus().ifPresent(serverList -> serverList.forEach(server -> {
             prometheusSd.add(
                     new PrometheusSD(
                             server.getAdministration().getPrometheus().getIp() + ":" + server.getAdministration().getPrometheus().getPort(),
@@ -61,7 +60,7 @@ public class ServerService {
                     )
             );
         }));
-        return Optional.of(prometheusSd);
+        return prometheusSd;
     }
 
     public Server create(Server server) {

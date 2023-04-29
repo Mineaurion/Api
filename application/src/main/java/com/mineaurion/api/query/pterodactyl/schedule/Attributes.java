@@ -5,14 +5,15 @@ import java.util.Date;
 public class Attributes {
     private int id;
     private String name;
-    private Cron cron;
+    private Object cron; // Child keys but not for use now
     private boolean is_active;
     private boolean is_processing;
     private Date last_run_at;
     private Date next_run_at;
     private Date created_at;
     private Date updated_at;
-    private Relationships relationships;
+
+    private Object relationships; // Child keys but not for use now
 
     public int getId() {
         return id;
@@ -32,11 +33,11 @@ public class Attributes {
         return this;
     }
 
-    public Cron getCron() {
+    public Object getCron() {
         return cron;
     }
 
-    public Attributes setCron(Cron cron) {
+    public Attributes setCron(Object cron) {
         this.cron = cron;
         return this;
     }
@@ -95,11 +96,11 @@ public class Attributes {
         return this;
     }
 
-    public Relationships getRelationships() {
+    public Object getRelationships() {
         return relationships;
     }
 
-    public Attributes setRelationships(Relationships relationships) {
+    public Attributes setRelationships(Object relationships) {
         this.relationships = relationships;
         return this;
     }

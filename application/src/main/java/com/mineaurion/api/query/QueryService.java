@@ -2,7 +2,7 @@ package com.mineaurion.api.query;
 
 import com.mineaurion.api.library.model.query.Schedule;
 import com.mineaurion.api.library.model.query.Server;
-import com.mineaurion.api.query.lib.MCQuery;
+import com.mineaurion.api.query.lib.MCQueryResponse;
 import com.mineaurion.api.server.ServerService;
 import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -30,7 +30,7 @@ public class QueryService {
     }
 
     private Server getQueryServer(com.mineaurion.api.server.model.Server server){
-        MCQuery query = this.minecraftQueryService.getQueryResponse(
+        MCQueryResponse query = this.minecraftQueryService.getQueryResponse(
                 server.getName(),
                 server.getAdministration().getQuery().getIp(),
                 server.getAdministration().getQuery().getPort())

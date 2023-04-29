@@ -18,7 +18,6 @@ public class Server {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @NotEmpty
     @Schema(example = "Ultimate 1.4.7")
     private String name;
@@ -28,7 +27,6 @@ public class Server {
     @Valid
     private Version version;
 
-    @NotNull
     @NotEmpty
     @Pattern(regexp = "^(overworld|skyblock)$", message = "Le type doit être soit overworld soit skyblock")
     private String type;
@@ -38,9 +36,8 @@ public class Server {
     @Valid
     private Access access;
 
-    @NotNull
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z\\d .-]+$", message = "ne correspond pas à un nom de domaine")
+    @Pattern(regexp = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$", message = "ne correspond pas à un nom de domaine")
     @Schema(example = "ultimate.mineaurion.com")
     private String dns;
 
@@ -68,6 +65,10 @@ public class Server {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
