@@ -59,6 +59,8 @@ public class MCQuery {
                 }
             }
             mcQueryResponse.setStatus(true);
+            mcQueryResponse.setOnlinePlayers(Integer.parseInt(values.getOrDefault("numplayers", "0")));
+            mcQueryResponse.setMaxPlayers(Integer.parseInt(values.getOrDefault("maxplayers", "0")));
             readString(receiveData, cursor);
             final Set<String> players = new HashSet<>();
             while (cursor.get() < length) {
