@@ -54,7 +54,7 @@ dependencies {
 
 	testImplementation "org.testcontainers:testcontainers:1.17.6"
 	testImplementation "org.testcontainers:junit-jupiter:1.17.6"
-	testImplementation "org.testcontainers:mariadb:1.17.6"
+	testImplementation "org.testcontainers:mariadb:1.18.3"
 	testImplementation 'org.springframework.security:spring-security-test:6.0.3'
 	testImplementation('org.springframework.boot:spring-boot-starter-test:3.0.6') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
