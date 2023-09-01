@@ -52,9 +52,9 @@ dependencies {
 
 	// developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-	testImplementation "org.testcontainers:testcontainers:1.18.3"
-	testImplementation "org.testcontainers:junit-jupiter:1.18.3"
-	testImplementation "org.testcontainers:mariadb:1.18.3"
+	testImplementation "org.testcontainers:testcontainers:1.19.0"
+	testImplementation "org.testcontainers:junit-jupiter:1.19.0"
+	testImplementation "org.testcontainers:mariadb:1.19.0"
 	testImplementation 'org.springframework.security:spring-security-test:6.1.2'
 	testImplementation('org.springframework.boot:spring-boot-starter-test:3.1.1') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
