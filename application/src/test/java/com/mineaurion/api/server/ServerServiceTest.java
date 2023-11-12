@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -100,14 +101,14 @@ public class ServerServiceTest {
     public void should_find_by_externalId_and_return_one_server(){
         // Arrange
         final var expectServer = Faker.server();
-        when(repository.findByAdministrationExternalId(anyString())).thenReturn(Optional.of(expectServer));
+        when(repository.findByAdministrationExternalId(any(UUID.class))).thenReturn(Optional.of(expectServer));
 
         // Act
-        final var actual = service.findByExternalId(Faker.faker.animal().name());
+        final var actual = service.findByExternalId(UUID.randomUUID());
 
         // Assert
         assertThat(actual).usingRecursiveComparison().isEqualTo(Optional.of(expectServer));
-        verify(repository, times(1)).findByAdministrationExternalId(anyString());
+        verify(repository, times(1)).findByAdministrationExternalId(any((UUID.class)));
         verifyNoMoreInteractions(repository);
     }
 

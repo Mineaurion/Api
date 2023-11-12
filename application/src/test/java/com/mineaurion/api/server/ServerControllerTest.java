@@ -157,14 +157,14 @@ public class ServerControllerTest {
     public void getOneByExternalIdExist() throws Exception {
         // Arrange
         Server server = Faker.server();
-        String id = server.getAdministration().getExternalId().toString();
+        UUID id = server.getAdministration().getExternalId();
         when(serverService.findByExternalId(id)).thenReturn(Optional.of(server));
 
         // Act
         RequestBuilder requestBuilder = MockMvcRequestBuilders.get(String.format("/servers/externalid/%s", id)).accept(MediaType.APPLICATION_JSON);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.administration.externalId", is(id)))
+                .andExpect(jsonPath("$.administration.externalId", is(id.toString())))
                 .andReturn();
 
         // Assert
@@ -174,7 +174,7 @@ public class ServerControllerTest {
     @Test
     public void getOneByExternalIdNotExist() throws Exception {
         // Arrange
-        String id = UUID.randomUUID().toString();
+        UUID id = UUID.randomUUID();
         when(serverService.findByExternalId(id)).thenReturn(Optional.empty());
 
         // Act
@@ -185,6 +185,23 @@ public class ServerControllerTest {
 
         // Assert
         verify(serverService, times(1)).findByExternalId(id);
+    }
+
+    @Test
+    public void getOneByExternalIdWithBadUUID() throws Exception {
+
+        // Arrange
+        String id = "badUUID";
+        when(serverService.findByExternalId(any(UUID.class))).thenReturn(Optional.empty());
+
+        // Act
+        RequestBuilder requestBuilder = MockMvcRequestBuilders.get(String.format("/servers/externalid/%s", id)).accept(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isBadRequest())
+                .andReturn();
+
+        // Assert
+        verify(serverService, times(0)).findByExternalId(any(UUID.class));
     }
 
     @Test

@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/servers")
@@ -55,7 +56,12 @@ public class ServerController {
 
     @GetMapping("/externalid/{id}")
     public ResponseEntity<Server> findByExternalId(@PathVariable("id") String id) {
-        return ResponseEntity.of(service.findByExternalId(id));
+        try {
+            UUID externalId = UUID.fromString(id);
+            return ResponseEntity.of(service.findByExternalId(UUID.fromString(id)));
+        } catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @GetMapping("/prometheus-sd")

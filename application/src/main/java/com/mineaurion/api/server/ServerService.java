@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -38,7 +39,7 @@ public class ServerService {
         return repository.findById(id);
     }
 
-    public Optional<Server> findByExternalId(String id) {
+    public Optional<Server> findByExternalId(UUID id) {
         return repository.findByAdministrationExternalId(id);
     }
 
